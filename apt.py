@@ -1,5 +1,7 @@
+import os
 from flask import Flask, request, make_response
- 
+from pathlib import Path
+
 app = Flask(__name__)
  
 # mainpage
@@ -11,18 +13,33 @@ def index():
 @app.route('/log')
 def log():
     log_string = ''
-    with open('/home/pi/PiWaterflow/waterflow.log', 'r') as file:
+
+    file_folder = Path(__file__).parent
+    waterflow_log = os.path.join(file_folder, '../PiWaterflow/waterflow.log')
+
+    with open(waterflow_log, 'r') as file:
         log_string = file.read()
     response = make_response(log_string)
     response.headers["content-type"] = "text/plain"
     response.boy = log_string
     return response
 
-@app.route('/programs',methods=['GET', 'POST'])
-def programs():
+@app.route('/config',methods=['GET', 'POST'])
+def config():
     if request.method == 'GET':
-        nombreUser = request.args.get('nombreUser')
-        return "<h1>GET " + nombreUser + "</h1>" 
+        #nombreUser = request.args.get('nombreUser')
+
+        file_folder = Path(__file__).parent
+        config_log = os.path.join(file_folder, '../PiWaterflow/config.yml')
+
+        with open(config_log, 'r') as file:
+            log_string = file.read()
+        response = make_response(log_string)
+        response.headers["content-type"] = "text/plain"
+        response.boy = log_string
+        return response
+
+        #return "<h1>GET " + nombreUser + "</h1>"
     elif  request.method == 'POST':
         language = request.form.get('language')
         framework = request.form['framework']
