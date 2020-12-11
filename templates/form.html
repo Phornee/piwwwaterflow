@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Untitled Form</title>
 <link rel="stylesheet" type="text/css" href="static/css/view.css" media="all">
-<script type="text/javascript" src="static/js/view.js"></script>
+<!--<script type="text/javascript" src="static/js/view.js"></script> -->
 
 </head>
 <body id="main_body" >
@@ -13,34 +13,33 @@
 	<div id="form_container">
 	
 		<h1><a>PiWaterflow</a></h1>
-		<form id="form_9355" class="appnitro"  method="post" action="">
+		<form id="form_9355" class="appnitro"  method="POST" action="">
 		<div class="form_description">
 			<h2>PiWaterflow programs</h2>
 			<p>See and modify the irrigation programs.</p>
+			{{ programs }}
 		</div>						
 		
 		<ul >
 			<li id="li_4" >
 				<span>
 					<label class="description" for="element_4">Start </label>
-					<input id="element_4_1" name="element_4_1" class="element text " size="2" type="text" maxlength="2" value=""/> : 
-					<label>HH</label>
+					<input id="hour1" name="hour1" class="element text " size="2" type="text" maxlength="2" value={{hour1}} /> :
 				</span>
 				<span>
 					<label class="description" for="element_4">_______</label>
-					<input id="element_4_2" name="element_4_2" class="element text " size="2" type="text" maxlength="2" value=""/>
-					<label>MM</label>
+					<input id="minute1" name="minute1" class="element text " size="2" type="text" maxlength="2" value={{minute1}} />
 				</span>
 				<span>
 					<label class="description small" >__</label>
 				</span>
 				<span>
 					<label class="description" >Valve 1</label>
-					<input id="element_4_2" name="element_4_2" class="element text " size="2" type="text" maxlength="2" value=""/>  
+					<input id="valve11" name="valve11" class="element text " size="2" type="text" maxlength="2" value={{valve11}} />
 				</span>
 				<span>
 					<label class="description" >Valve 2</label>
-					<input id="element_4_2" name="element_4_2" class="element text " size="2" type="text" maxlength="2" value=""/> 
+					<input id="valve12" name="valve12" class="element text " size="2" type="text" maxlength="2" value={{valve12}} />
 				</span>
 			</li>		
 			

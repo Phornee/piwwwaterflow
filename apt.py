@@ -1,6 +1,8 @@
 import os
-from flask import Flask, request, make_response, render_template
+from flask import Flask, request, make_response, render_template, redirect, url_for
 from pathlib import Path
+import yaml
+import datetime
 
 app = Flask(__name__)
  
@@ -56,19 +58,40 @@ def config():
 @app.route('/form-example', methods=['GET', 'POST']) #allow both GET and POST requests
 def form_example():
     if request.method == 'POST':  #this block is only entered when the form is submitted
-        language = request.form.get('language')
-        framework = request.form['framework']
+        file_folder = Path(__file__).parent
+        config_yml_path = os.path.join(file_folder, '../PiWaterflow/config.yml')
 
-        return '''<h1>The language value is: {}</h1>
-                  <h1>The framework value is: {}</h1>'''.format(language, framework)
+        with open(config_yml_path, 'r') as config_file:
+            config = yaml.load(config_file, Loader=yaml.FullLoader)
 
-    return render_template('form.html')
+        config['programs'][0]['start_time'] = datetime.datetime.strptime(config['programs'][0]['start_time'], '%H:%M:%S')
+        new_datetime = config['programs'][0]['start_time'].replace(hour=int(request.form.get('hour1')),
+                                                                       minute=int(request.form.get('minute1')))
+        config['programs'][0]['start_time'] = new_datetime.strftime('%H:%M:%S')
+        config['programs'][0]['valves_times'][0] = int(request.form.get('valve11'))
+        config['programs'][0]['valves_times'][1] = int(request.form.get('valve12'))
 
-    # return '''<form method="POST">
-    #               Language: <input type="text" name="language"><br>
-    #               Framework: <input type="text" name="framework"><br>
-    #               <input type="submit" value="Submit"><br>
-    #           </form>'''
+        with open(config_yml_path, 'w') as config_file:
+            yaml.dump(config, config_file)
+
+        return redirect(url_for('form_example')) #Redirect so that we dont RE-POST same data again when refreshing
+
+
+    file_folder = Path(__file__).parent
+    config_yml_path = os.path.join(file_folder, '../PiWaterflow/config.yml')
+
+    with open(config_yml_path) as config_file:
+        config = yaml.load(config_file, Loader=yaml.FullLoader)
+
+        for program in config['programs']:
+            program['start_time'] = datetime.datetime.strptime(program['start_time'], '%H:%M:%S')
+
+    return render_template('form.html', hour1=config['programs'][0]['start_time'].hour
+                                      , minute1=config['programs'][0]['start_time'].minute
+                                      , valve11=config['programs'][0]['valves_times'][0]
+                                      , valve12=config['programs'][0]['valves_times'][1])
+
+
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')
