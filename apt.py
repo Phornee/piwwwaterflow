@@ -1,5 +1,5 @@
 import os
-from flask import Flask, request, make_response
+from flask import Flask, request, make_response, render_template
 from pathlib import Path
 
 app = Flask(__name__)
@@ -62,11 +62,13 @@ def form_example():
         return '''<h1>The language value is: {}</h1>
                   <h1>The framework value is: {}</h1>'''.format(language, framework)
 
-    return '''<form method="POST">
-                  Language: <input type="text" name="language"><br>
-                  Framework: <input type="text" name="framework"><br>
-                  <input type="submit" value="Submit"><br>
-              </form>'''
+    return render_template('form.html')
+
+    # return '''<form method="POST">
+    #               Language: <input type="text" name="language"><br>
+    #               Framework: <input type="text" name="framework"><br>
+    #               <input type="submit" value="Submit"><br>
+    #           </form>'''
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')
