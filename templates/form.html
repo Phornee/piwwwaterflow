@@ -2,10 +2,11 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Untitled Form</title>
+<title>PiWaterflow irrigation system</title>
 <link rel="stylesheet" type="text/css" href="static/css/view.css" media="all">
 <!--<script type="text/javascript" src="static/js/view.js"></script> -->
-
+<link rel="icon" type="image/png" sizes="32x32" href="static/img/icon-32.png">
+<link rel="icon" type="image/png" sizes="256x256" href="static/img/icon-256.png">
 </head>
 <body id="main_body" >
 	
@@ -15,34 +16,58 @@
 		<h1><a>PiWaterflow</a></h1>
 		<form id="form_9355" class="appnitro"  method="POST" action="">
 		<div class="form_description">
-			<h2>PiWaterflow programs</h2>
-			<p>See and modify the irrigation programs.</p>
-			{{ programs }}
-		</div>						
+			<ul>
+				<li>
+					<img src="static/img/icon-32.png">
+					<strong>PiWaterflow remote control</strong>
+				</li>
+			</ul>
+			<p id = 'status'>Status: Waterflow loop running OK.</p>
+			<script>
+				if ('{{looprunning}}'=='False')
+				{
+				 document.getElementById('status').innerHTML = "Status: Waterflow loop NOT running!!!"
+				 document.getElementById('status').style.color = '#FF0000'
+				}
+    		</script>
+
+		</div>
 		
 		<ul >
-			<li id="li_4" >
-				<span>
-					<label class="description" for="element_4">Start </label>
-					<input id="hour1" name="hour1" class="element text " size="2" type="text" maxlength="2" value={{hour1}} /> :
-				</span>
-				<span>
-					<label class="description" for="element_4">_______</label>
-					<input id="minute1" name="minute1" class="element text " size="2" type="text" maxlength="2" value={{minute1}} />
-				</span>
-				<span>
-					<label class="description small" >__</label>
-				</span>
-				<span>
-					<label class="description" >Valve 1</label>
-					<input id="valve11" name="valve11" class="element text " size="2" type="text" maxlength="2" value={{valve11}} />
-				</span>
-				<span>
-					<label class="description" >Valve 2</label>
-					<input id="valve12" name="valve12" class="element text " size="2" type="text" maxlength="2" value={{valve12}} />
-				</span>
-			</li>		
-			
+			<fieldset>
+				<legend>Program 1</legend>
+				<li id="program1" >
+					<span>
+						<label class="description">Start </label>
+						<input type="time" id="time1" name="time1" value={{time1}} required>
+					</span>
+					<span>
+						<label class="description" >Valve 1</label>
+						<input id="valve11" name="valve11" class="element text " size="2" type="text" maxlength="2" value={{valve11}} />
+					</span>
+					<span>
+						<label class="description" >Valve 2</label>
+						<input id="valve12" name="valve12" class="element text " size="2" type="text" maxlength="2" value={{valve12}} />
+					</span>
+				</li>
+			</fieldset>
+			<fieldset>
+				<legend>Program 2</legend>
+				<li id="program2" >
+					<span>
+						<label class="description">Start </label>
+						<input type="time" id="time2" name="time2" value={{time2}} required>
+					</span>
+					<span>
+						<label class="description" >Valve 1</label>
+						<input id="valve21" name="valve21" class="element text " size="2" type="text" maxlength="2" value={{valve21}} />
+					</span>
+					<span>
+						<label class="description" >Valve 2</label>
+						<input id="valve22" name="valve22" class="element text " size="2" type="text" maxlength="2" value={{valve22}} />
+					</span>
+				</li>
+			</fieldset>
 			<li class="buttons">
 					<input type="hidden" name="form_id" value="9355" />
 					<input id="saveForm" class="button_text" type="submit" name="submit" value="Change Programs" />
