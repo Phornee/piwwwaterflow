@@ -135,4 +135,12 @@ def form_example():
 
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0')
+    import sys
+
+    if sys.platform.startswith("win"):
+        app.run(debug=True, host='0.0.0.0')
+    elif sys.platform.startswith("linux"):
+        import daemon
+        with daemon.DaemonContext():
+            app.run(debug=True, host='0.0.0.0')
+
