@@ -7,23 +7,24 @@
 <!--<script type="text/javascript" src="static/js/view.js"></script> -->
 <link rel="icon" type="image/png" sizes="32x32" href="static/img/icon-32.png">
 <link rel="icon" type="image/png" sizes="256x256" href="static/img/icon-256.png">
+<script src="https://code.jquery.com/jquery-3.5.0.js"></script>
 </head>
 <body id="main_body" >
 	
 	<img id="top" src="static/img/top.png" alt="">
 	<div id="form_container">
 	
-		<h1><a>PiWaterflow</a></h1>
+		<h1><a align="center">PiWaterflow</a></h1>
 		<form id="form_9355" class="appnitro"  method="POST" action="">
 		<div class="form_description">
 			<ul>
 				<li>
-					<img src="static/img/icon-32.png">
+					<img src="static/img/icon-32.png" alt="Icon">
 					<strong>PiWaterflow remote control</strong>
 				</li>
 			</ul>
 			<p id = 'status'>Status: Waterflow loop running OK.</p>
-			<script>
+			<script type="text/javascript">
 				if ('{{looprunning}}'=='False')
 				{
 				 document.getElementById('status').innerHTML = "Status: Waterflow loop NOT running!!!"
@@ -69,12 +70,43 @@
 				</li>
 			</fieldset>
 			<li class="buttons">
-					<input type="hidden" name="form_id" value="9355" />
-					<input id="saveForm" class="button_text" type="submit" name="submit" value="Change Programs" />
+				<input id="saveForm" class="button_text" type="submit" name="submit" value="Change Programs" />
+				<button id="toggle" type="button" onclick="removeItem(); return false;">Stop</button>
+				<script type="text/javascript">
+				function removeItem() {
+  					// Send the data using post
+  					var posting = $.post( '/service', { activate: true}  );
+  					//window.location.replace("/form-example");
+  					location.reload(true);
+				}
+				</script>
 			</li>
 		</ul>
 		</form>	
 	</div>
 	<img id="bottom" src="static/img/bottom.png" alt="">
+	<script type="text/javascript">
+		const inputs = document.querySelectorAll("input");
+
+		function saveCurrent() {
+		  for (const el of inputs) el.oldValue = el.value;
+		}
+
+		function setEnabled() {
+		  var e = false;
+		  for (const el of inputs) {
+			if (el.oldValue !== el.value) {
+			  e = true;
+			  break;
+			}
+		  }
+		  document.getElementById("saveForm").disabled = !e;
+		}
+
+		document.addEventListener("input", setEnabled);
+
+		saveCurrent();
+		setEnabled();
+  	</script>
 	</body>
 </html>

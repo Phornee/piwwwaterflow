@@ -6,6 +6,40 @@ import datetime
 
 app = Flask(__name__)
 
+def findWaterflowProcess():
+    import psutil
+    found = False
+    for i in psutil.process_iter():
+        try:
+            cmdline = i.cmdline()
+            if cmdline[0].find('python') != -1:
+                for cmd in cmdline:
+                    if cmd.find('rele.py') != -1:
+                        found = True
+                        break
+                if found:
+                    break
+        except Exception as e:
+            pass
+    return found
+
+@app.route('/service', methods=['GET', 'POST'])  # allow both GET and POST requests
+def service():
+    process_running = findWaterflowProcess()
+    if request.method == 'GET':
+        return process_running
+    elif request.method == 'POST':
+        activate = request.form.get('activate') == 'true'
+        if activate:
+            if not process_running:
+                from subprocess import Popen, PIPE, DETACHED_PROCESS, CREATE_NEW_PROCESS_GROUP
+                p = Popen(['python', '../PiWaterflow/rele.py'], stdin=PIPE, stdout=PIPE, stderr=PIPE, creationflags=DETACHED_PROCESS | CREATE_NEW_PROCESS_GROUP)
+        else:
+            if process_running:
+                with open("../PiWaterflow/stop", "w"):  # create marker file so that loop ends smootly
+                    pass
+
+        return redirect(url_for('form_example'))  # Redirect so that we dont RE-POST same data again when refreshing
 
 # mainpage
 @app.route('/')
@@ -85,16 +119,7 @@ def form_example():
         # Sort the programs by time
         config['programs'].sort(key=lambda prog: prog['start_time'])
 
-    import psutil
-    found = False
-    for i in psutil.process_iter():
-        try:
-            cmdline = i.cmdline()
-            if cmdline[0].find('python') != -1 and cmdline[1].find('rele.py') != -1:
-                found = True
-                break
-        except Exception as e:
-            pass
+    found = findWaterflowProcess()
 
     return render_template('form.html'
                            , time1=("{:02}:{:02}".format(config['programs'][0]['start_time'].hour,
