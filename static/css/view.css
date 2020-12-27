@@ -16,6 +16,15 @@ body
 	width:440px;
 }
 
+#textarea
+{
+	background:#fff;
+	border:1px solid #ccc;
+	margin:0 auto;
+	text-align:left;
+	width:440px;
+}
+
 #top
 {
 	display:block;

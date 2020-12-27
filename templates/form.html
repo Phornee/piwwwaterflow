@@ -4,7 +4,6 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>PiWaterflow irrigation system</title>
 <link rel="stylesheet" type="text/css" href="static/css/view.css" media="all">
-<!--<script type="text/javascript" src="static/js/view.js"></script> -->
 <link rel="icon" type="image/png" sizes="32x32" href="static/img/icon-32.png">
 <link rel="icon" type="image/png" sizes="256x256" href="static/img/icon-256.png">
 <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
@@ -16,97 +15,72 @@
 	
 		<h1><a align="center">PiWaterflow</a></h1>
 		<form id="form_9355" class="appnitro"  method="POST" action="">
-		<div class="form_description">
-			<ul>
-				<li>
-					<img src="static/img/icon-32.png" alt="Icon">
-					<strong>PiWaterflow remote control</strong>
+			<div class="form_description">
+				<ul>
+					<li>
+						<img src="static/img/icon-32.png" alt="Icon">
+						<strong>PiWaterflow remote control</strong>
+					</li>
+				</ul>
+				<p id = 'status'>Status: Waterflow loop running OK.</p>
+			</div>
+
+			<ul >
+				<fieldset>
+					<legend>Program 1</legend>
+					<li id="program1" >
+						<span>
+							<label class="description">Start </label>
+							<input type="time" id="time1" name="time1" value={{time1}} required>
+						</span>
+						<span>
+							<label class="description" >Valve 1</label>
+							<input id="valve11" name="valve11" class="element text " size="2" type="text" maxlength="2" value={{valve11}} />
+						</span>
+						<span>
+							<label class="description" >Valve 2</label>
+							<input id="valve12" name="valve12" class="element text " size="2" type="text" maxlength="2" value={{valve12}} />
+						</span>
+					</li>
+				</fieldset>
+				<fieldset>
+					<legend>Program 2</legend>
+					<li id="program2" >
+						<span>
+							<label class="description">Start </label>
+							<input type="time" id="time2" name="time2" value={{time2}} required>
+						</span>
+						<span>
+							<label class="description" >Valve 1</label>
+							<input id="valve21" name="valve21" class="element text " size="2" type="text" maxlength="2" value={{valve21}} />
+						</span>
+						<span>
+							<label class="description" >Valve 2</label>
+							<input id="valve22" name="valve22" class="element text " size="2" type="text" maxlength="2" value={{valve22}} />
+						</span>
+					</li>
+				</fieldset>
+				<li class="buttons">
+					<input id="saveForm" class="button_text" type="submit" name="submit" value="Change Programs" />
+					<!--<button id="toggle" type="button" onclick="removeItem(); return false;">Stop</button>
+					<script type="text/javascript">
+					function removeItem() {
+						// Send the data using post
+						var posting = $.post( '/service', { activate: true}  );
+						//window.location.replace("/waterflow");
+						location.reload(true);
+					}
+					</script>-->
 				</li>
 			</ul>
-			<p id = 'status'>Status: Waterflow loop running OK.</p>
-			<script type="text/javascript">
-				if ('{{looprunning}}'=='False')
-				{
-				 document.getElementById('status').innerHTML = "Status: Waterflow loop NOT running!!!"
-				 document.getElementById('status').style.color = '#FF0000'
-				}
-    		</script>
-
-		</div>
-		
-		<ul >
-			<fieldset>
-				<legend>Program 1</legend>
-				<li id="program1" >
-					<span>
-						<label class="description">Start </label>
-						<input type="time" id="time1" name="time1" value={{time1}} required>
-					</span>
-					<span>
-						<label class="description" >Valve 1</label>
-						<input id="valve11" name="valve11" class="element text " size="2" type="text" maxlength="2" value={{valve11}} />
-					</span>
-					<span>
-						<label class="description" >Valve 2</label>
-						<input id="valve12" name="valve12" class="element text " size="2" type="text" maxlength="2" value={{valve12}} />
-					</span>
-				</li>
-			</fieldset>
-			<fieldset>
-				<legend>Program 2</legend>
-				<li id="program2" >
-					<span>
-						<label class="description">Start </label>
-						<input type="time" id="time2" name="time2" value={{time2}} required>
-					</span>
-					<span>
-						<label class="description" >Valve 1</label>
-						<input id="valve21" name="valve21" class="element text " size="2" type="text" maxlength="2" value={{valve21}} />
-					</span>
-					<span>
-						<label class="description" >Valve 2</label>
-						<input id="valve22" name="valve22" class="element text " size="2" type="text" maxlength="2" value={{valve22}} />
-					</span>
-				</li>
-			</fieldset>
-			<li class="buttons">
-				<input id="saveForm" class="button_text" type="submit" name="submit" value="Change Programs" />
-				<button id="toggle" type="button" onclick="removeItem(); return false;">Stop</button>
-				<script type="text/javascript">
-				function removeItem() {
-  					// Send the data using post
-  					var posting = $.post( '/service', { activate: true}  );
-  					//window.location.replace("/form-example");
-  					location.reload(true);
-				}
-				</script>
-			</li>
-		</ul>
 		</form>	
 	</div>
+	<textarea id="log" rows="20"  style = "width:440px; resize: vertical; font-size: 10px;" readonly>
+		Log
+	</textarea>
+
 	<img id="bottom" src="static/img/bottom.png" alt="">
-	<script type="text/javascript">
-		const inputs = document.querySelectorAll("input");
+	<script type="text/javascript" src="static/js/code.js"></script>
 
-		function saveCurrent() {
-		  for (const el of inputs) el.oldValue = el.value;
-		}
-
-		function setEnabled() {
-		  var e = false;
-		  for (const el of inputs) {
-			if (el.oldValue !== el.value) {
-			  e = true;
-			  break;
-			}
-		  }
-		  document.getElementById("saveForm").disabled = !e;
-		}
-
-		document.addEventListener("input", setEnabled);
-
-		saveCurrent();
-		setEnabled();
-  	</script>
 	</body>
 </html>
