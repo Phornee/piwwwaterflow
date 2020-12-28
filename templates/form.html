@@ -41,6 +41,13 @@
 							<label class="description" >Valve 2</label>
 							<input id="valve12" name="valve12" class="element text " size="2" type="text" maxlength="2" value={{valve12}} />
 						</span>
+						<span>
+							<label class="description" >Enabled</label>
+							<input type="checkbox" id="prog1enabled" name="prog1enabled" value="True">
+							<script type="text/javascript">
+								document.getElementById('prog1enabled').checked = '{{enabled1}}'=='True'
+							</script>
+						</span>
 					</li>
 				</fieldset>
 				<fieldset>
@@ -57,6 +64,13 @@
 						<span>
 							<label class="description" >Valve 2</label>
 							<input id="valve22" name="valve22" class="element text " size="2" type="text" maxlength="2" value={{valve22}} />
+						</span>
+						<span>
+							<label class="description" >Enabled</label>
+							<input type="checkbox" id="prog2enabled" name="prog2enabled" value="True">
+							<script type="text/javascript">
+								document.getElementById('prog2enabled').checked = '{{enabled2}}'=='True'
+							</script>
 						</span>
 					</li>
 				</fieldset>

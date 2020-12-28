@@ -1,15 +1,31 @@
 const inputs = document.querySelectorAll("input");
 
 function saveCurrent() {
-  for (const el of inputs) el.oldValue = el.value;
+  for (const el of inputs)
+   {
+        if (el.type == 'checkbox')
+            el.oldValue = el.checked;
+        else
+            el.oldValue = el.value;
+   }
 }
 
 function setEnabled() {
   var e = false;
   for (const el of inputs) {
-    if (el.oldValue !== el.value) {
-      e = true;
-      break;
+    if (el.type == 'checkbox')
+    {
+        if (el.oldValue !== el.checked) {
+            e = true;
+            break;
+        }
+    }
+    else
+    {
+        if (el.oldValue !== el.value) {
+            e = true;
+            break;
+        }
     }
   }
   document.getElementById("saveForm").disabled = !e;

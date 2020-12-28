@@ -3,6 +3,7 @@ from flask import Flask, request, make_response, render_template, redirect, url_
 from pathlib import Path
 import yaml
 import datetime
+from PiWaterflow.waterflow import Waterflow
 
 app = Flask(__name__)
 
@@ -25,21 +26,25 @@ def findWaterflowProcess():
 
 @app.route('/service', methods=['GET', 'POST'])  # allow both GET and POST requests
 def service():
-    process_running = findWaterflowProcess()
+    process_running = Waterflow.isLoopingCorrectly()
     if request.method == 'GET':
-        return "true" if process_running else "false"
-    elif request.method == 'POST':
-        activate = request.form.get('activate') == 'true'
-        if activate:
-            if not process_running:
-                from subprocess import Popen, PIPE, DETACHED_PROCESS, CREATE_NEW_PROCESS_GROUP
-                p = Popen(['python', '../PiWaterflow/rele.py'], stdin=PIPE, stdout=PIPE, stderr=PIPE, creationflags=DETACHED_PROCESS | CREATE_NEW_PROCESS_GROUP)
-        else:
-            if process_running:
-                with open("../PiWaterflow/stop", "w"):  # create marker file so that loop ends smootly
-                    pass
+         return "true" if process_running else "false"
 
-        return redirect(url_for('waterflow'))  # Redirect so that we dont RE-POST same data again when refreshing
+    # process_running = findWaterflowProcess()
+    # if request.method == 'GET':
+    #     return "true" if process_running else "false"
+    # elif request.method == 'POST':
+    #     activate = request.form.get('activate') == 'true'
+    #     if activate:
+    #         if not process_running:
+    #             from subprocess import Popen, PIPE, DETACHED_PROCESS, CREATE_NEW_PROCESS_GROUP
+    #             p = Popen(['python', '../PiWaterflow/rele.py'], stdin=PIPE, stdout=PIPE, stderr=PIPE, creationflags=DETACHED_PROCESS | CREATE_NEW_PROCESS_GROUP)
+    #     else:
+    #         if process_running:
+    #             with open("../PiWaterflow/stop", "w"):  # create marker file so that loop ends smootly
+    #                 pass
+    #
+    #     return redirect(url_for('waterflow'))  # Redirect so that we dont RE-POST same data again when refreshing
 
 # mainpage
 @app.route('/')
@@ -93,6 +98,9 @@ def waterflow():
         config['programs'][0]['start_time'] = new_datetime.strftime('%H:%M:%S')
         config['programs'][0]['valves_times'][0] = int(request.form.get('valve11'))
         config['programs'][0]['valves_times'][1] = int(request.form.get('valve12'))
+        enabled1_checkbox_value = request.form.get('prog1enabled')
+        config['programs'][0]['enabled'] = enabled1_checkbox_value is not None
+
 
         config['programs'][1]['start_time'] = datetime.datetime.strptime(config['programs'][1]['start_time'],
                                                                          '%H:%M:%S')
@@ -101,11 +109,13 @@ def waterflow():
         config['programs'][1]['start_time'] = new_datetime.strftime('%H:%M:%S')
         config['programs'][1]['valves_times'][0] = int(request.form.get('valve21'))
         config['programs'][1]['valves_times'][1] = int(request.form.get('valve22'))
+        enabled2_checkbox_value = request.form.get('prog2enabled')
+        config['programs'][1]['enabled'] = enabled2_checkbox_value is not None
 
         with open(config_yml_path, 'w') as config_file:
             yaml.dump(config, config_file)
 
-        return redirect(url_for('form_example'))  # Redirect so that we dont RE-POST same data again when refreshing
+        return redirect(url_for('waterflow'))  # Redirect so that we dont RE-POST same data again when refreshing
 
     file_folder = Path(__file__).parent
     config_yml_path = os.path.join(file_folder, '../PiWaterflow/config.yml')
@@ -126,10 +136,12 @@ def waterflow():
                                                          config['programs'][0]['start_time'].minute))
                            , valve11=config['programs'][0]['valves_times'][0]
                            , valve12=config['programs'][0]['valves_times'][1]
+                           , enabled1=config['programs'][0]['enabled']
                            , time2=("{:02}:{:02}".format(config['programs'][1]['start_time'].hour,
                                                          config['programs'][1]['start_time'].minute))
                            , valve21=config['programs'][1]['valves_times'][0]
                            , valve22=config['programs'][1]['valves_times'][1]
+                           , enabled2=config['programs'][1]['enabled']
                            , looprunning=found
                            )
 
