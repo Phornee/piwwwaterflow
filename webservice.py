@@ -3,7 +3,7 @@ from flask import Flask, request, make_response, render_template, redirect, url_
 from pathlib import Path
 import yaml
 import datetime
-from PiWaterflow.waterflow import Waterflow
+from PiWaterflow import Waterflow
 
 app = Flask(__name__)
 
