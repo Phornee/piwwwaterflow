@@ -55,13 +55,8 @@ def index():
 # log
 @app.route('/log', methods=['GET'])
 def log():
-    log_string = ''
+    log_string = Waterflow.getLog()
 
-    file_folder = Path(__file__).parent
-    waterflow_log = os.path.join(file_folder, '../PiWaterflow/waterflow.log')
-
-    with open(waterflow_log, 'r') as file:
-        log_string = file.read()
     response = make_response(log_string)
     response.headers["content-type"] = "text/plain"
     response.boy = log_string
@@ -84,64 +79,52 @@ def config():
 
 @app.route('/waterflow', methods=['GET', 'POST'])  # allow both GET and POST requests
 def waterflow():
+    parsed_config = Waterflow.getConfig()
+
     if request.method == 'POST':  # this block is only entered when the form is submitted
-        file_folder = Path(__file__).parent
-        config_yml_path = os.path.join(file_folder, '../PiWaterflow/config.yml')
-
-        with open(config_yml_path, 'r') as config_file:
-            config = yaml.load(config_file, Loader=yaml.FullLoader)
-
-        config['programs'][0]['start_time'] = datetime.datetime.strptime(config['programs'][0]['start_time'],
+        parsed_config['programs'][0]['start_time'] = datetime.datetime.strptime(parsed_config['programs'][0]['start_time'],
                                                                          '%H:%M:%S')
         time1 = datetime.datetime.strptime(request.form.get('time1'), '%H:%M')
-        new_datetime = config['programs'][0]['start_time'].replace(hour=time1.hour, minute=time1.minute)
-        config['programs'][0]['start_time'] = new_datetime.strftime('%H:%M:%S')
-        config['programs'][0]['valves_times'][0] = int(request.form.get('valve11'))
-        config['programs'][0]['valves_times'][1] = int(request.form.get('valve12'))
+        new_datetime = parsed_config['programs'][0]['start_time'].replace(hour=time1.hour, minute=time1.minute)
+        parsed_config['programs'][0]['start_time'] = new_datetime.strftime('%H:%M:%S')
+        parsed_config['programs'][0]['valves_times'][0] = int(request.form.get('valve11'))
+        parsed_config['programs'][0]['valves_times'][1] = int(request.form.get('valve12'))
         enabled1_checkbox_value = request.form.get('prog1enabled')
-        config['programs'][0]['enabled'] = enabled1_checkbox_value is not None
+        parsed_config['programs'][0]['enabled'] = enabled1_checkbox_value is not None
 
-
-        config['programs'][1]['start_time'] = datetime.datetime.strptime(config['programs'][1]['start_time'],
+        parsed_config['programs'][1]['start_time'] = datetime.datetime.strptime(parsed_config['programs'][1]['start_time'],
                                                                          '%H:%M:%S')
         time2 = datetime.datetime.strptime(request.form.get('time2'), '%H:%M')
-        new_datetime = config['programs'][1]['start_time'].replace(hour=time2.hour, minute=time2.minute)
-        config['programs'][1]['start_time'] = new_datetime.strftime('%H:%M:%S')
-        config['programs'][1]['valves_times'][0] = int(request.form.get('valve21'))
-        config['programs'][1]['valves_times'][1] = int(request.form.get('valve22'))
+        new_datetime = parsed_config['programs'][1]['start_time'].replace(hour=time2.hour, minute=time2.minute)
+        parsed_config['programs'][1]['start_time'] = new_datetime.strftime('%H:%M:%S')
+        parsed_config['programs'][1]['valves_times'][0] = int(request.form.get('valve21'))
+        parsed_config['programs'][1]['valves_times'][1] = int(request.form.get('valve22'))
         enabled2_checkbox_value = request.form.get('prog2enabled')
-        config['programs'][1]['enabled'] = enabled2_checkbox_value is not None
+        parsed_config['programs'][1]['enabled'] = enabled2_checkbox_value is not None
 
-        with open(config_yml_path, 'w') as config_file:
-            yaml.dump(config, config_file)
+        Waterflow.setConfig(parsed_config)
 
         return redirect(url_for('waterflow'))  # Redirect so that we dont RE-POST same data again when refreshing
 
-    file_folder = Path(__file__).parent
-    config_yml_path = os.path.join(file_folder, '../PiWaterflow/config.yml')
+    for program in parsed_config['programs']:
+        program['start_time'] = datetime.datetime.strptime(program['start_time'], '%H:%M:%S')
 
-    with open(config_yml_path) as config_file:
-        config = yaml.load(config_file, Loader=yaml.FullLoader)
-
-        for program in config['programs']:
-            program['start_time'] = datetime.datetime.strptime(program['start_time'], '%H:%M:%S')
-
-        # Sort the programs by time
-        config['programs'].sort(key=lambda prog: prog['start_time'])
+    # Sort the programs by time
+    parsed_config['programs'].sort(key=lambda prog: prog['start_time'])
 
     found = findWaterflowProcess()
 
     return render_template('form.html'
-                           , time1=("{:02}:{:02}".format(config['programs'][0]['start_time'].hour,
-                                                         config['programs'][0]['start_time'].minute))
-                           , valve11=config['programs'][0]['valves_times'][0]
-                           , valve12=config['programs'][0]['valves_times'][1]
-                           , enabled1=config['programs'][0]['enabled']
-                           , time2=("{:02}:{:02}".format(config['programs'][1]['start_time'].hour,
-                                                         config['programs'][1]['start_time'].minute))
-                           , valve21=config['programs'][1]['valves_times'][0]
-                           , valve22=config['programs'][1]['valves_times'][1]
-                           , enabled2=config['programs'][1]['enabled']
+                           , time1=("{:02}:{:02}".format(parsed_config['programs'][0]['start_time'].hour,
+                                                         parsed_config['programs'][0]['start_time'].minute))
+                           , valve11=parsed_config['programs'][0]['valves_times'][0]
+                           , valve12=parsed_config['programs'][0]['valves_times'][1]
+                           , enabled1=parsed_config['programs'][0]['enabled']
+                           , time2=("{:02}:{:02}".format(parsed_config['programs'][1]['start_time'].hour,
+                                                         parsed_config['programs'][1]['start_time'].minute))
+                           , valve21=parsed_config['programs'][1]['valves_times'][0]
+                           , valve22=parsed_config['programs'][1]['valves_times'][1]
+                           , enabled2=parsed_config['programs'][1]['enabled']
                            , looprunning=found
                            )
 
