@@ -62,6 +62,12 @@ def log():
     response.boy = log_string
     return response
 
+@app.route('/force', methods=['POST'])
+def force_program():
+    result = Waterflow.forceProgram(int(request.data))
+
+    return redirect(url_for('waterflow'))
+
 
 @app.route('/config', methods=['GET'])
 def config():

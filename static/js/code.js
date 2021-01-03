@@ -71,3 +71,18 @@ function update(){
 update();
 
 setInterval("update();",10000);
+
+function forceProgram(program_forced){
+    let requestservice = new XMLHttpRequest();
+    requestservice.open('POST', '/force');
+    requestservice.responseType = 'text';
+    requestservice.onload = function() {
+        if (requestservice.response=='false'){
+
+        }
+    }
+    requestservice.send(program=program_forced);
+}
+
+document.getElementById("play1").addEventListener("click", function(){forceProgram(0);})
+document.getElementById("play2").addEventListener("click", function(){forceProgram(1);})
