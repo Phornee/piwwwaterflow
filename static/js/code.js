@@ -54,14 +54,16 @@ function update(){
     requestservice.open('GET', '/service');
     requestservice.responseType = 'text';
     requestservice.onload = function() {
+        var d = new Date();
+        var timestring = d.toLocaleTimeString();
         if (requestservice.response=='false')
         {
-            document.getElementById('status').innerHTML = "Status: Waterflow loop NOT running!!!"
+            document.getElementById('status').innerHTML = "Status: Waterflow loop NOT running!!! (" + timestring + ")"
             document.getElementById('status').style.color = '#FF0000'
         }
         else
         {
-            document.getElementById('status').innerHTML = "Status: Waterflow loop running OK."
+            document.getElementById('status').innerHTML = "Status: Waterflow loop running OK.(" + timestring + ")"
             document.getElementById('status').style.color = '#000000'
         }
     }
@@ -70,7 +72,7 @@ function update(){
 
 update();
 
-setInterval("update();",10000);
+setInterval("update();",30000);
 
 function forceProgram(program_forced){
     let requestservice = new XMLHttpRequest();
