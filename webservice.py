@@ -1,7 +1,6 @@
 import os
 from flask import Flask, request, make_response, render_template, redirect, url_for
 from pathlib import Path
-import yaml
 import datetime
 from PiWaterflow import Waterflow
 
