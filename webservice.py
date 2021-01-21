@@ -2,7 +2,7 @@ import os
 from flask import Flask, request, make_response, render_template, redirect, url_for
 from pathlib import Path
 import datetime
-from PiWaterflow import Waterflow
+from piwaterflow import Waterflow
 
 app = Flask(__name__)
 
@@ -72,7 +72,7 @@ def force_program():
 def config():
     if request.method == 'GET':
         file_folder = Path(__file__).parent
-        config_log = os.path.join(file_folder, '../PiWaterflow/config.yml')
+        config_log = os.path.join(file_folder, '../piwaterflow/config.yml')
 
         with open(config_log, 'r') as file:
             log_string = file.read()
