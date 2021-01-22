@@ -1,2 +1,2 @@
-# PiWWW
-Flask Webservice for waterflow system
+# piwwwaterflow
+Flask/Gunicorn Webservice for piwaterflow system
