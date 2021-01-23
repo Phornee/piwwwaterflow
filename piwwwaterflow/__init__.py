@@ -1,1 +1,1 @@
-import .webservice
+from .webservice import *

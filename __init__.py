@@ -1,1 +1,1 @@
-import .piwwwaterflow
+from .piwwwaterflow import webservice
