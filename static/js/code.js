@@ -63,7 +63,7 @@ function update(){
         }
         else
         {
-            document.getElementById('status').innerHTML = "Status: Waterflow loop running OK.(" + timestring + ")"
+            document.getElementById('status').innerHTML = "Status: Waterflow loop running OK. (" + timestring + ")"
             document.getElementById('status').style.color = '#000000'
         }
     }
