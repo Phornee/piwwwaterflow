@@ -1,4 +1,4 @@
-from PiWaterflow import PiWWWaterflowService
+from piwaterflow import PiWWWaterflowService
 from pathlib import Path
 
 if __name__ == "__main__":
