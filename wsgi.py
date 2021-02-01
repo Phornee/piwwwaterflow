@@ -1,7 +1,11 @@
 from piwaterflow import PiWWWaterflowService
 from pathlib import Path
 
-if __name__ == "__main__":
+def create_app():
     current_path = "{}/templates".format(Path().absolute())
     flask_app = PiWWWaterflowService(template_folder=current_path)
-    flask_app.run()
+    return flask_app
+
+if __name__ == "__main__":
+    create_app().run()
+
