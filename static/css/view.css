@@ -85,8 +85,16 @@ form li
 {
 	display:block;
 	margin:0;
-	padding:4px 5px 9px 9px;
+	padding:1px 1px 1px 1px;
 	position:relative;
+}
+
+fieldset
+{
+    padding-block-start: 0.15em;
+    padding-inline-start: 0.15em;
+    padding-inline-end: 0.15em;
+    padding-block-end: 0.15em
 }
 
 form li:after
@@ -111,7 +119,7 @@ form li:after
 {
 	clear:both;
 	display:block;
-	margin-top:10px;
+	margin-top:0px;
 }
 
 * html form li
