@@ -76,7 +76,7 @@ setInterval("update();",30000);
 
 function forceProgram(program_forced){
     let requestservice = new XMLHttpRequest();
-    requestservice.open('POST', '/force');
+    requestservice.open('POST', '/force_program');
     requestservice.responseType = 'text';
     requestservice.onload = function() {
         if (requestservice.response=='false'){
