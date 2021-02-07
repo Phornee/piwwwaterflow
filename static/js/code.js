@@ -68,6 +68,25 @@ function update(){
         }
     }
     requestservice.send();
+
+    let requestforced = new XMLHttpRequest();
+    requestforced.open('GET', '/force_program');
+    requestforced.responseType = 'text';
+    requestforced.onload = function() {
+        if (requestforced.response=='false')
+        {
+            document.getElementById("play1").disabled = false
+            document.getElementById("play2").disabled = false
+
+        }
+        else
+        {
+            document.getElementById("play1").disabled = true
+            document.getElementById("play2").disabled = true
+        }
+    }
+    requestforced.send();
+
 }
 
 update();
@@ -84,6 +103,9 @@ function forceProgram(program_forced){
         }
     }
     requestservice.send(program=program_forced);
+
+    document.getElementById("play1").disabled = true
+    document.getElementById("play2").disabled = true
 }
 
 document.getElementById("play1").addEventListener("click", function(){forceProgram(0);})
