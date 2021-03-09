@@ -6,94 +6,124 @@
 <link rel="icon" type="image/png" sizes="32x32" href="static/img/icon-32.png">
 <link rel="icon" type="image/png" sizes="256x256" href="static/img/icon-256.png">
 </head>
-<body id="main_body" >
+<body id="main_body" style="background-color: #222222; color: #7F7F7F;" >
 	
 	<img id="top" src="static/img/top.png" alt="">
-	<div id="form_container">
-	
+	<div id="form_container" align="center">
 		<h1><a align="center" style="height: 40px">PiWaterflow</a></h1>
-		<form id="waterflow_form" style=" margin-block-end: 0em" method="POST" action="">
+		<form id="waterflow_form" style=" margin-block-end: 0em;" method="POST" action="">
 			<div class="form_description" style="margin-bottom: -;margin-bottom: 0px; margin-top: 0px;">
 				<ul>
 					<li>
 						<img src="static/img/icon-32.png" alt="Icon">
-						<strong>PiWaterflow remote control</strong>
+						<strong>  PiWaterflow remote control</strong>
 					</li>
 				</ul>
 				<p id = 'status'>Status: Retrieving status...</p>
 			</div>
 
-			<ul >
-				<fieldset>
-					<legend>Program 1</legend>
-					<li id="program1" >
-						<span>
-							<label class="description">Start </label>
-							<input type="time" id="time1" name="time1" value={{time1}} required>
-						</span>
-						<span>
-							<label class="description" >Valve 1</label>
-							<input id="valve11" name="valve11" class="element text " size="2" type="text" maxlength="2" value={{valve11}} style="margin-top: 2px;" >
-						</span>
-						<span>
-							<label class="description" >Valve 2</label>
-							<input id="valve12" name="valve12" class="element text " size="2" type="text" maxlength="2" value={{valve12}} style="margin-top: 2px;" >
-						</span>
-						<span>
-							<label class="description" >Enabled</label>
-							<input type="checkbox" id="prog1enabled" name="prog1enabled" value="True" style="margin-top: 5px;">
-							<script type="text/javascript">
-								document.getElementById('prog1enabled').checked = '{{enabled1}}'=='True'
-							</script>
-						</span>
-						<span>
-							<label class="description" >Force now</label>
-							<button id="play1" class="btn default"  >
-								<img src="static/img/play.png"></img>
-							</button>
-						</span>
-					</li>
-				</fieldset>
-				<fieldset>
-					<legend>Program 2</legend>
-					<li id="program2" >
-						<span>
-							<label class="description">Start </label>
-							<input type="time" id="time2" name="time2" value={{time2}} required>
-						</span>
-						<span>
-							<label class="description" >Valve 1</label>
-							<input id="valve21" name="valve21" class="element text " size="2" type="text" maxlength="2" value={{valve21}} style="margin-top: 2px;" >
-						</span>
-						<span>
-							<label class="description" >Valve 2</label>
-							<input id="valve22" name="valve22" class="element text " size="2" type="text" maxlength="2" value={{valve22}} style="margin-top: 2px;" >
-						</span>
-						<span>
-							<label class="description" >Enabled</label>
-							<input type="checkbox" id="prog2enabled" name="prog2enabled" value="True" style="margin-top: 5px;" >
-							<script type="text/javascript">
-								document.getElementById('prog2enabled').checked = '{{enabled2}}'=='True'
-							</script>
-						</span>
-						<span>
-							<label class="description" >Force now</label>
-							<button id="play2" class="btn default"  >
-								<img src="static/img/play.png"></img>
-							</button>
-						</span>
-					</li>
-				</fieldset>
-				<li class="buttons">
-					<input id="saveForm" class="button_text" type="submit" name="submit" value="Save Changes" />
-				</li>
-			</ul>
+			<table border="1" class="table" id="tablacontroles">
+				<tr>
+					<td>
+						<table id="programsandforce">
+							<tr>
+								<td>
+									<table border="2px" id="programstable">
+										<tr border="0px" id="prog1row">
+											<td border="0px">
+												<fieldset>
+													<legend class="fieldsetheader"> Program 1</legend>
+													<li id="program1" >
+														<span>
+															<label class="programheader">Start </label>
+															<input type="time" class="text" id="time1" name="time1" value={{time1}} required>
+														</span>
+														<span>
+															<label class="programheader" >Valve 1</label>
+															<input id="valve11" name="valve11" class="element text " size="2" type="text" maxlength="2" value={{valve11}} style="margin-top: 2px;" >
+														</span>
+														<span>
+															<label class="programheader" >Valve 2</label>
+															<input id="valve12" name="valve12" class="element text " size="2" type="text" maxlength="2" value={{valve12}} style="margin-top: 2px;" >
+														</span>
+														<span>
+															<label class="programheader" >Enabled</label>
+															<input type="checkbox" id="prog1enabled" name="prog1enabled" value="True" style="margin-top: 5px;">
+															<script type="text/javascript">
+																document.getElementById('prog1enabled').checked = '{{enabled1}}'=='True'
+															</script>
+														</span>
+													</li>
+												</fieldset>
+											</td>
+										</tr>
+										<tr border="0" id="prog2row">
+											<td>
+												<fieldset>
+													<legend class="fieldsetheader">Program 2</legend>
+													<li id="program2" >
+														<span>
+															<label class="programheader">Start </label>
+															<input type="time" class="text" id="time2" name="time2" value={{time2}} required>
+														</span>
+														<span>
+															<label class="programheader" >Valve 1</label>
+															<input id="valve21" name="valve21" class="element text " size="2" type="text" maxlength="2" value={{valve21}} style="margin-top: 2px;" >
+														</span>
+														<span>
+															<label class="programheader" >Valve 2</label>
+															<input id="valve22" name="valve22" class="element text " size="2" type="text" maxlength="2" value={{valve22}} style="margin-top: 2px;" >
+														</span>
+														<span>
+															<label class="programheader" >Enabled</label>
+															<input type="checkbox" id="prog2enabled" name="prog2enabled" value="True" style="margin-top: 5px;" >
+															<script type="text/javascript">
+																document.getElementById('prog2enabled').checked = '{{enabled2}}'=='True'
+															</script>
+														</span>
+													</li>
+												</fieldset>
+											</td>
+										</tr>
+										<tr>
+											<td>
+												<input id="saveForm" class="button_text" type="submit" name="submit" value="Save Changes" />
+											</td>
+										</tr>
+									</table>
+								</td>
+								<td style='text-align:left;'>
+									<fieldset id="forceFieldset">
+										<legend class="fieldsetheader">Force</legend>
+										<input type="radio" id="program1trigger" name="forcetrigger" value="prog1" onclick="forceProgram(this,0);">
+										<label for="program1trigger" class="header">Program1</label><br>
+										<input type="radio" id="program2trigger" name="forcetrigger" value="prog2"  onclick="forceProgram(this,1);">
+										<label for="program2trigger" class="header">Program2</label><br>
+										<input type="radio" id="valve1trigger" name="forcetrigger" value="valve1" onclick="forceValve(this,0);">
+										<label for="valve1trigger" class="header">Valve1</label><br>
+										<input type="radio" id="valve2trigger" name="forcetrigger" value="valve2"  onclick="forceValve(this,1);">
+										<label for="valve2trigger" class="header">Valve2</label><br>
+									</fieldset>
+								</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<input id="stop" class="button_text" type="button" name="stop" value="Stop" onclick="stopWaterflow(this)" />
+					</td>
+				</tr>
+			</table>
 		</form>	
 	</div>
-	<textarea id="log" rows="20"  style = "width:440px; resize: vertical; font-size: 10px;" readonly>Retrieving log...</textarea>
-
+	<div>
+		<textarea id="log" rows="15"  style = "width:440px; resize: vertical; font-size: 10px;" readonly>Retrieving log...</textarea>
+	</div>
+	<div>
+    	<iframe id="grafana_iframe" src="http://192.168.0.14:3000/d/95wZWikRz/piwaterflow?orgId=1&kiosk=tv" width="440" height="360"></iframe>
+	</div>
 	<img id="bottom" src="static/img/bottom.png" alt="">
 	<script type="text/javascript" src="static/js/code.js"></script>
-    <iframe src="http://192.168.0.14:3000/d/95wZWikRz/piwaterflow?orgId=1&kiosk=tv" width="440" height="360"></iframe>
 	</body>
 </html>

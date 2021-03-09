@@ -3,26 +3,21 @@ body
 	background:#fffff;
 	font-family:"Lucida Grande", Tahoma, Arial, Verdana, sans-serif;
 	font-size:small;
-	margin:8px 0 16px;
+	margin:4px 0 4px;
 	text-align:center;
 }
 
 #form_container
 {
-	background:#fff;
 	border:1px solid #ccc;
 	margin:0 auto;
 	text-align:left;
 	width:440px;
 }
 
-#textarea
-{
-	background:#fff;
-	border:1px solid #ccc;
-	margin:0 auto;
-	text-align:left;
-	width:440px;
+textarea#log {
+    color: #7F7F7F;
+    background: #222222;
 }
 
 #top
@@ -89,21 +84,24 @@ form li
 	position:relative;
 }
 
+td
+{
+    border:0px;
+    text-align: center;
+}
+
+.td_left
+{
+    border:0px;
+    text-align: left;
+}
+
 fieldset
 {
     padding-block-start: 0.15em;
     padding-inline-start: 0.15em;
     padding-inline-end: 0.15em;
     padding-block-end: 0.15em
-}
-
-form li:after
-{
-	clear:both;
-	content:".";
-	display:block;
-	height:0;
-	visibility:hidden;
 }
 
 .btn {
@@ -165,7 +163,6 @@ form li div
 
 form li span
 {
-	color:#444;
 	float:left;
 	margin:0 4px 0 0;
 	padding:0 0 0px;
@@ -214,7 +211,6 @@ form li div label
 form li span label
 {
 	clear:both;
-	color:#444;
 	display:block;
 	font-size:9px;
 	line-height:9px;
@@ -257,7 +253,7 @@ form li .datepicker
 {
 	font-size:95%;
 	line-height:130%;
-	margin:0px 10px 12px;
+	margin:0px 10px 2px;
 }
 
 form hr
@@ -323,6 +319,37 @@ label.description
 	padding:0 0 1px;
 }
 
+
+label.header
+{
+	border:none;
+	font-size:80%;
+	font-weight:500;
+	line-height:100%;
+	padding:0 0 1px;
+}
+
+label.programheader
+{
+	border:none;
+	display:block;
+	font-size:80%;
+	font-weight:500;
+	line-height:100%;
+	padding:0 0 1px;
+}
+
+
+legend.fieldsetheader
+{
+	border:none;
+	display:block;
+	font-size:85%;
+	font-weight:700;
+	line-height:100%;
+	padding:0 0 1px;
+}
+
 span.symbol
 {
 	font-size:115%;
@@ -331,12 +358,12 @@ span.symbol
 
 input.text
 {
-	background:#fff url(../../../static/img/shadow.gif) repeat-x top;
+    background: #222222;
+    color: #7f7f7f;
 	border-bottom:1px solid #ddd;
 	border-left:1px solid #c3c3c3;
 	border-right:1px solid #c3c3c3;
 	border-top:1px solid #7c7c7c;
-	color:#333;
 	font-size:100%;
 	margin:0;
 	padding:2px 0;
@@ -573,67 +600,4 @@ form li:hover .guidelines
     font-size:160%;
     font-weight:normal;
     margin:0pt 0pt 3px;
-}
-
-/*** Password ****/
-ul.password{
-    margin-top:60px;
-    margin-bottom: 60px;
-    text-align: center;
-}
-.password h2{
-    color:#DF0000;
-    font-weight:bold;
-    margin:0pt auto 10px;
-}
-
-.password input.text {
-   font-size:170% !important;
-   width:280px;
-   text-align: center;
-}
-.password label{
-   display:block;
-   font-size:120% !important;
-   padding-top:10px;
-   font-weight:bold;
-}
-
-#li_captcha{
-   padding-left: 5px;
-}
-
-
-#li_captcha span{
-	float:none;
-}
-
-/** Embedded Form **/
-
-.embed #form_container{
-	border: none;
-}
-
-.embed #top, .embed #bottom, .embed h1{
-	display: none;
-}
-
-.embed #form_container{
-	width: 100%;
-}
-
-.embed #footer{
-	text-align: left;
-	padding-left: 10px;
-	width: 99%;
-}
-
-.embed #footer.success{
-	text-align: center;
-}
-
-.embed form.appnitro
-{
-	margin:0px 0px 0;
-	
 }
