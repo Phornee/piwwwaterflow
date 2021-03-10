@@ -49,21 +49,23 @@ h1
 	
 }
 
-h1 a
+.mainheader
 {
-    display: block;
-	height:100%;
-	min-height:40px;
-	overflow:hidden;
+    background-color: #DFDFDF;
+    padding: 5px
 }
 
-
-img
-{
-	behavior:url(css/iepngfix.htc);
-	border:none;
+div div span{
+    font-size:180%;
+    color: #222222;
+    vertical-align: middle;
 }
 
+div img {
+    display: inline-block;
+    vertical-align: middle;
+    border:none;
+}
 
 /**** Form Section ****/
 
@@ -254,6 +256,7 @@ form li .datepicker
 	font-size:95%;
 	line-height:130%;
 	margin:0px 10px 2px;
+	padding: 2px 0px 0px
 }
 
 form hr
@@ -366,6 +369,19 @@ input.text
 	border-top:1px solid #7c7c7c;
 	font-size:100%;
 	margin:0;
+	padding:2px 0;
+}
+
+input.number
+{
+    background: #222222;
+    color: #7f7f7f;
+	border-bottom:1px solid #ddd;
+	border-left:1px solid #c3c3c3;
+	border-right:1px solid #c3c3c3;
+	border-top:1px solid #7c7c7c;
+	font-size:80%;
+	margin-top:2px;
 	padding:2px 0;
 }
 
