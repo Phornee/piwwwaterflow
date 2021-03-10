@@ -19,33 +19,33 @@
 				<p id = 'status'>Status: Retrieving status...</p>
 			</div>
 
-			<table border="1" class="table" id="tablacontroles"  style="width:100%">
-				<tr>
+			<table border="1" class="table" id="tablacontroles"  style="width:100%; height:50vw">
+				<tr style="height:90%;">
 					<td>
-						<table id="programsandforce" style="width:100%">
+						<table id="programsandforce" style="width:100%;height:100%;">
 							<tr>
 								<td>
-									<table border="2px" id="programstable" style="width:100%">
-										<tr border="0px" id="prog1row">
+									<table border="2px" id="programstable" style="width:100%; height:90%;">
+										<tr border="0px" id="prog1row" style="height:45%;">
 											<td border="0px">
 												<fieldset>
 													<legend class="fieldsetheader"> Program 1</legend>
 													<li id="program1" >
 														<span>
 															<label class="programheader">Start </label>
-															<input type="time" class="text" id="time1" name="time1" value={{time1}} required style="width:70px">
+															<input type="time" class="text" id="time1" name="time1" value={{time1}} required>
 														</span>
 														<span>
 															<label class="programheader" >Valve 1</label>
-															<input id="valve11" name="valve11" class="element number" type="number"  min="0" max="10" value={{valve11}} style="width:50px" >
+															<input id="valve11" name="valve11" class="element number" type="number"  min="0" max="10" value={{valve11}}>
 														</span>
 														<span>
 															<label class="programheader" >Valve 2</label>
-															<input id="valve12" name="valve12" class="element number" type="number" min="0" max="10" value={{valve12}} style="width:50px" >
+															<input id="valve12" name="valve12" class="element number" type="number" min="0" max="10" value={{valve12}}>
 														</span>
 														<span>
 															<label class="programheader" >Enabled</label>
-															<input type="checkbox" id="prog1enabled" name="prog1enabled" value="True" style="margin-top: 5px;">
+															<input type="checkbox" id="prog1enabled" name="prog1enabled" value="True" class="checkstyle">
 															<script type="text/javascript">
 																document.getElementById('prog1enabled').checked = '{{enabled1}}'=='True'
 															</script>
@@ -54,26 +54,26 @@
 												</fieldset>
 											</td>
 										</tr>
-										<tr border="0" id="prog2row">
+										<tr border="0" id="prog2row" style="height:45%;">
 											<td>
 												<fieldset>
 													<legend class="fieldsetheader">Program 2</legend>
 													<li id="program2" >
 														<span>
 															<label class="programheader">Start </label>
-															<input type="time" class="text" id="time2" name="time2" value={{time2}} required style="width:70px">
+															<input type="time" class="text" id="time2" name="time2" value={{time2}} required>
 														</span>
 														<span>
 															<label class="programheader" >Valve 1</label>
-															<input id="valve21" name="valve21" class="element number"  type="number" min="0" max="10" value={{valve21}} style="width:50px">
+															<input id="valve21" name="valve21" class="element number"  type="number" min="0" max="10" value={{valve21}}>
 														</span>
 														<span>
 															<label class="programheader" >Valve 2</label>
-															<input id="valve22" name="valve22" class="element number"  type="number" min="0" max="10"  value={{valve22}} style="width:50px" >
+															<input id="valve22" name="valve22" class="element number"  type="number" min="0" max="10"  value={{valve22}}>
 														</span>
 														<span>
 															<label class="programheader" >Enabled</label>
-															<input type="checkbox" id="prog2enabled" name="prog2enabled" value="True" style="margin-top: 5px;" >
+															<input type="checkbox" id="prog2enabled" name="prog2enabled" value="True" class="checkstyle">
 															<script type="text/javascript">
 																document.getElementById('prog2enabled').checked = '{{enabled2}}'=='True'
 															</script>
@@ -82,7 +82,7 @@
 												</fieldset>
 											</td>
 										</tr>
-										<tr>
+										<tr style="height:10%;">
 											<td>
 												<input id="saveForm" class="button_text" type="submit" name="submit" value="Save Changes" />
 											</td>
@@ -106,7 +106,7 @@
 						</table>
 					</td>
 				</tr>
-				<tr>
+				<tr style="height:10%;">
 					<td>
 						<input id="stop" class="button_text" type="button" name="stop" value="Stop" onclick="stopWaterflow(this)" />
 					</td>
@@ -115,7 +115,7 @@
 		</form>	
 	</div>
 	<div>
-		<textarea id="log" rows="12"  style = "width:100%; height:30vw; font-size: 2vw;" readonly>Retrieving log...</textarea>
+		<textarea id="log" rows="12"  style = "width:100%; height:30vw; font-size:40%;" readonly>Retrieving log...</textarea>
 	</div>
 	<div>
     	<iframe id="grafana_iframe" src="http://192.168.0.14:3000/d/95wZWikRz/piwaterflow?orgId=1&kiosk=tv" width="100%" height="300vw"></iframe>
