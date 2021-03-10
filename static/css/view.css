@@ -2,7 +2,7 @@ body
 {
 	background:#fffff;
 	font-family:"Lucida Grande", Tahoma, Arial, Verdana, sans-serif;
-	font-size:small;
+	font-size: 5vw;
 	margin:4px 0 4px;
 	text-align:center;
 }
@@ -12,7 +12,7 @@ body
 	border:1px solid #ccc;
 	margin:0 auto;
 	text-align:left;
-	width:440px;
+	width:100%;
 }
 
 textarea#log {
@@ -67,6 +67,10 @@ div img {
     border:none;
 }
 
+.table
+{
+  font-size:100% !important;
+}
 /**** Form Section ****/
 
 form ul
@@ -253,7 +257,7 @@ form li .datepicker
 
 .form_description p
 {
-	font-size:95%;
+	font-size:80%;
 	line-height:130%;
 	margin:0px 10px 2px;
 	padding: 2px 0px 0px
@@ -301,6 +305,7 @@ input.button_text
 {
 	overflow:visible;
 	padding:0 7px;
+	font-size: 2vw;
 	width:auto;
 }
 
@@ -326,7 +331,7 @@ label.description
 label.header
 {
 	border:none;
-	font-size:80%;
+	font-size:2vw;
 	font-weight:500;
 	line-height:100%;
 	padding:0 0 1px;
@@ -336,7 +341,7 @@ label.programheader
 {
 	border:none;
 	display:block;
-	font-size:80%;
+	font-size:2vw;
 	font-weight:500;
 	line-height:100%;
 	padding:0 0 1px;
@@ -347,7 +352,7 @@ legend.fieldsetheader
 {
 	border:none;
 	display:block;
-	font-size:85%;
+	font-size:2.5vw;
 	font-weight:700;
 	line-height:100%;
 	padding:0 0 1px;
