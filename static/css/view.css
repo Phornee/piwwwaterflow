@@ -2,8 +2,8 @@ body
 {
 	background:#fffff;
 	font-family:"Lucida Grande", Tahoma, Arial, Verdana, sans-serif;
-	font-size: 3vh;
-	margin:4px 0 4px;
+	font-size: 3em;
+	margin:4px;
 	text-align:center;
 }
 
@@ -25,14 +25,13 @@ body
 
 #form_container
 {
-	border:1px solid #ccc;
 	margin:0 auto;
 	text-align:left;
 	width:100%;
 }
 
 textarea#log {
-    color: #7F7F7F;
+    color: inherit;
     background: #222222;
 }
 
@@ -68,7 +67,6 @@ h1
 .mainheader
 {
     background-color: #DFDFDF;
-    padding: 5px
 }
 
 div div span{
@@ -384,6 +382,7 @@ label.header
 	font-weight:500;
 	line-height:100%;
 	padding:0 0 1px;
+	color: #9f9f9f
 }
 
 label.programheader
@@ -393,7 +392,7 @@ label.programheader
 	font-size:2.5vw;
 	font-weight:500;
 	line-height:100%;
-	padding:0 0 1px;
+	padding:0.2em 0 0.2em;
 }
 
 
@@ -416,29 +415,29 @@ span.symbol
 .timeclass
 {
     background: #222222;
-    color: #7f7f7f;
+    color: inherit;
 	border-bottom:1px solid #ddd;
 	border-left:1px solid #c3c3c3;
 	border-right:1px solid #c3c3c3;
 	border-top:1px solid #7c7c7c;
 	font-size:4vh;
 	width: 100%;
-	height: 7vh;
+	height: 6vh;
     margin-top:2px;
-	padding: 10px;
+	padding: 0.2em;
 }
 
 input.text
 {
     background: #222222;
-    color: #7f0000;
+    color: inherit;
 	border-bottom:1px solid #ddd;
 	border-left:1px solid #c3c3c3;
 	border-right:1px solid #c3c3c3;
 	border-top:1px solid #7c7c7c;
 	font-size:4vw;
 	width: 25vw;
-	height: 7vh;
+	height: 6vh;
 	margin:0;
     padding: 10px;
 }
@@ -453,14 +452,14 @@ input.text
 input.number
 {
     background: #222222;
-    color: #7f7f7f;
+    color: inherit;
 	border-bottom:1px solid #ddd;
 	border-left:1px solid #c3c3c3;
 	border-right:1px solid #c3c3c3;
 	border-top:1px solid #7c7c7c;
 	font-size:4vh;
 	width: 100%;
-	height: 7vh;
+	height: 6vh;
 	margin-top:2px;
     padding: 10px;
 }

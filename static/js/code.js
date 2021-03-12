@@ -51,7 +51,7 @@ function resetForceTriggers(){
     var x = document.getElementsByName('forcetrigger');
     for (var i = 0; i < x.length; i++) {
         x[i].checked = false;
-        x[i].labels.item(0).style.color = '#7F7F7F'
+        x[i].labels.item(0).style.color = 'inherit'
         }
 }
 
