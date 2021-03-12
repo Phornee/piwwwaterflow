@@ -359,10 +359,18 @@ form .section_break p
 /**** Buttons ****/
 input.button_text
 {
+    border-radius: 5px;
+	border-bottom:2px solid #222222;
+	border-left:2px solid #DFDFDF;
+	border-right:2px solid #222222;
+	border-top:2px solid #DFDFDF;
+    background-image: linear-gradient(to bottom right, #333333 , #7F7F7F);
+
 	overflow:visible;
 	padding:0 7px;
-	font-size: 2.5vw;
-	width:auto;
+	font-size: 1em;
+	height: 2em;
+	width: 4em;
 }
 
 .buttons input

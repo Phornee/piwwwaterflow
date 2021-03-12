@@ -155,41 +155,51 @@ update();
 setInterval("update();",30000);
 
 function forceProgram(control, program_forced){
-    let requestservice = new XMLHttpRequest();
-    requestservice.open('POST', '/force');
-    requestservice.responseType = 'text';
-    requestservice.onload = function() {
-        if (requestservice.response=='false'){
+    if (confirm("Are you sure you want to force program?.")) {
+        let requestservice = new XMLHttpRequest();
+        requestservice.open('POST', '/force');
+        requestservice.responseType = 'text';
+        requestservice.onload = function() {
+            if (requestservice.response=='false'){
 
+            }
         }
+        var data = new FormData();
+        data.append('type', 'program');
+        data.append('value', program_forced);
+
+        requestservice.send(data);
+
+        control.style.color = '#00FF00'
+        setEnableForceFieldset(false)
     }
-    var data = new FormData();
-    data.append('type', 'program');
-    data.append('value', program_forced);
-
-    requestservice.send(data);
-
-    control.style.color = '#00FF00'
-    setEnableForceFieldset(false)
+    else {
+        control.checked = false
+    }
 }
 
 function forceValve(control, valve_forced){
-    let requestservice = new XMLHttpRequest();
-    requestservice.open('POST', '/force');
-    requestservice.responseType = 'text';
-    requestservice.onload = function() {
-        if (requestservice.response=='false'){
+    if (confirm("Are you sure you want to force valve?.")) {
+        let requestservice = new XMLHttpRequest();
+        requestservice.open('POST', '/force');
+        requestservice.responseType = 'text';
+        requestservice.onload = function() {
+            if (requestservice.response=='false'){
 
+            }
         }
+        var data = new FormData();
+        data.append('type', 'valve');
+        data.append('value', valve_forced);
+
+        requestservice.send(data);
+
+        control.style.color = '#00FF00'
+        setEnableForceFieldset(false)
     }
-    var data = new FormData();
-    data.append('type', 'valve');
-    data.append('value', valve_forced);
-
-    requestservice.send(data);
-
-    control.style.color = '#00FF00'
-    setEnableForceFieldset(false)
+    else {
+        control.checked = false
+    }
 }
 
 function stopWaterflow(button){
@@ -211,4 +221,3 @@ function handleTriggerValve(trigger_radio, valve){
         setEnableForceValve(true)
     }
 }
-
