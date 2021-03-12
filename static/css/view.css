@@ -359,6 +359,7 @@ form .section_break p
 /**** Buttons ****/
 input.button_text
 {
+    color: inherit;
     border-radius: 5px;
 	border-bottom:2px solid #222222;
 	border-left:2px solid #DFDFDF;
@@ -368,9 +369,9 @@ input.button_text
 
 	overflow:visible;
 	padding:0 7px;
-	font-size: 1em;
-	height: 2em;
-	width: 4em;
+	font-size: 20px;
+	height: 50px;
+	width: 200px;
 }
 
 .buttons input
