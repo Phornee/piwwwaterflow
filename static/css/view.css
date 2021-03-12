@@ -67,8 +67,8 @@ h1
 .mainheader
 {
     background-image: linear-gradient(to bottom right, white , #CFCFCF);
-    color: #DFDFDF;
-    text-shadow: 1px 1px 2px black, 0 0 25px black, 0 0 5px red;
+    color: #EFEFEF;
+    text-shadow: 1px 1px 2px black, 0 0 25px black, 0 0 5px black;
 }
 
 div div span{
@@ -433,7 +433,7 @@ span.symbol
 	border-left:2px solid #DFDFDF;
 	border-right:2px solid #222222;
 	border-top:2px solid #DFDFDF;
-    background-image: linear-gradient(to bottom right, #222222 , #7F7F7F);
+    background-image: linear-gradient(to bottom right, #332822 , #8F857F);
 	font-size:4vh;
 	width: 100%;
 	height: 6vh;
@@ -474,7 +474,7 @@ input.number
 	border-left:2px solid #DFDFDF;
 	border-right:2px solid #222222;
 	border-top:2px solid #DFDFDF;
-	background-image: linear-gradient(to bottom right, #222222 , #7F7F7F);
+	background-image: linear-gradient(to bottom right, #332822 , #8F857F);
 	font-size:4vh;
 	width: 100%;
 	height: 6vh;
