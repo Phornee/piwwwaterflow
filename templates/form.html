@@ -30,15 +30,15 @@
 													<legend class="fieldsetheader"> Program 1</legend>
 													<span class="spantime">
 														<label class="programheader">Start </label>
-														<input type="time" class="timeclass" id="time1" name="time1" value={{time1}} required>
+														<input type="time" class="timeclass copperround" id="time1" name="time1" value={{time1}} required>
 													</span>
 													<span class="spanvalve">
 														<label class="programheader" >Valve 1</label>
-														<input id="valve11" name="valve11" class="element number" type="number"  min="0" max="10" value={{valve11}}>
+														<input id="valve11" name="valve11" class="number copperround" type="number"  min="0" max="10" value={{valve11}}>
 													</span>
 													<span class="spanvalve">
 														<label class="programheader" >Valve 2</label>
-														<input id="valve12" name="valve12" class="element number" type="number" min="0" max="10" value={{valve12}}>
+														<input id="valve12" name="valve12" class="number copperround" type="number" min="0" max="10" value={{valve12}}>
 													</span>
 													<span class="spanenabled">
 														<input type="checkbox" id="prog1enabled" name="prog1enabled" value="True" class="checkstyle">
@@ -53,26 +53,24 @@
 											<td>
 												<fieldset>
 													<legend class="fieldsetheader">Program 2</legend>
-													<li id="program2" >
-														<span class="spantime">
-															<label class="programheader">Start </label>
-															<input type="time" class="timeclass" id="time2" name="time2" value={{time2}} required>
-														</span>
-														<span class="spanvalve">
-															<label class="programheader" >Valve 1</label>
-															<input id="valve21" name="valve21" class="element number"  type="number" min="0" max="10" value={{valve21}}>
-														</span>
-														<span class="spanvalve">
-															<label class="programheader" >Valve 2</label>
-															<input id="valve22" name="valve22" class="element number"  type="number" min="0" max="10"  value={{valve22}}>
-														</span>
-														<span class="spanenabled">
-															<input type="checkbox" id="prog2enabled" name="prog2enabled" value="True" class="checkstyle">
-															<script type="text/javascript">
-																document.getElementById('prog2enabled').checked = '{{enabled2}}'=='True'
-															</script>
-														</span>
-													</li>
+													<span class="spantime">
+														<label class="programheader">Start </label>
+														<input type="time" class="timeclass copperround" id="time2" name="time2" value={{time2}} required>
+													</span>
+													<span class="spanvalve">
+														<label class="programheader" >Valve 1</label>
+														<input id="valve21" name="valve21" class="number copperround"  type="number" min="0" max="10" value={{valve21}}>
+													</span>
+													<span class="spanvalve">
+														<label class="programheader" >Valve 2</label>
+														<input id="valve22" name="valve22" class="number copperround"  type="number" min="0" max="10"  value={{valve22}}>
+													</span>
+													<span class="spanenabled">
+														<input type="checkbox" id="prog2enabled" name="prog2enabled" value="True" class="checkstyle">
+														<script type="text/javascript">
+															document.getElementById('prog2enabled').checked = '{{enabled2}}'=='True'
+														</script>
+													</span>
 												</fieldset>
 											</td>
 										</tr>
