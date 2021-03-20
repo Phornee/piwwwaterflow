@@ -14,13 +14,13 @@
 		</div>
 		<form id="waterflow_form" style=" margin-block-end: 0em;" method="POST" action="">
 			<div class="form_description" style="margin-bottom: -;margin-bottom: 0px; margin-top: 0px;">
-				<p id = 'status'>Status: Retrieving status...</p>
+				<label id = 'status'>Status: Retrieving status...</label>
 			</div>
 
 			<table class="table" id="tablacontroles"  style="width:100%; height:33%">
 				<tr style="height:90%;">
 					<td>
-						<table id="programsandforce" style="width:100%;height:100%;">
+						<table id="programsandforce" style="width:100%;height:100%; border-bottom:1px dotted #ccc;">
 							<tr>
 								<td style="width:80%;">
 									<table class="table" id="programstable" style="width:100%; height:100%;">
@@ -30,15 +30,15 @@
 													<legend class="fieldsetheader"> Program 1</legend>
 													<span class="spantime">
 														<label class="programheader">Start </label>
-														<input type="time" class="timeclass copperround" id="time1" name="time1" value={{time1}} required>
+														<input type="time" class="timeclass copperround" id="time1" name="time1" required>
 													</span>
 													<span class="spanvalve">
 														<label class="programheader" >Valve 1</label>
-														<input id="valve11" name="valve11" class="number copperround" type="number"  min="0" max="10" value={{valve11}}>
+														<input id="valve11" name="valve11" class="number copperround" type="number"  min="0" max="10">
 													</span>
 													<span class="spanvalve">
 														<label class="programheader" >Valve 2</label>
-														<input id="valve12" name="valve12" class="number copperround" type="number" min="0" max="10" value={{valve12}}>
+														<input id="valve12" name="valve12" class="number copperround" type="number" min="0" max="10">
 													</span>
 													<span class="spanenabled">
 														<input type="checkbox" id="prog1enabled" name="prog1enabled" value="True" class="checkstyle">
@@ -55,15 +55,15 @@
 													<legend class="fieldsetheader">Program 2</legend>
 													<span class="spantime">
 														<label class="programheader">Start </label>
-														<input type="time" class="timeclass copperround" id="time2" name="time2" value={{time2}} required>
+														<input type="time" class="timeclass copperround" id="time2" name="time2" required>
 													</span>
 													<span class="spanvalve">
 														<label class="programheader" >Valve 1</label>
-														<input id="valve21" name="valve21" class="number copperround"  type="number" min="0" max="10" value={{valve21}}>
+														<input id="valve21" name="valve21" class="number copperround"  type="number" min="0" max="10">
 													</span>
 													<span class="spanvalve">
 														<label class="programheader" >Valve 2</label>
-														<input id="valve22" name="valve22" class="number copperround"  type="number" min="0" max="10"  value={{valve22}}>
+														<input id="valve22" name="valve22" class="number copperround"  type="number" min="0" max="10">
 													</span>
 													<span class="spanenabled">
 														<input type="checkbox" id="prog2enabled" name="prog2enabled" value="True" class="checkstyle">
@@ -85,13 +85,13 @@
 									<fieldset id="forceFieldset">
 										<legend class="fieldsetheader">Force</legend>
 										<br>
-										<input type="radio" id="program1trigger" name="forcetrigger" value="prog1" onclick="forceProgram(this,0);">
+										<input type="radio" id="program1trigger" name="forcetrigger" value="prog1" style="margin-left:10;" onclick="forceProgram(this,0);">
 										<label for="program1trigger" class="header">Prog 1</label><br><br>
-										<input type="radio" id="program2trigger" name="forcetrigger" value="prog2"  onclick="forceProgram(this,1);">
+										<input type="radio" id="program2trigger" name="forcetrigger" value="prog2" style="margin-left:10;" onclick="forceProgram(this,1);">
 										<label for="program2trigger" class="header">Prog 2</label><br><br>
-										<input type="radio" id="valve1trigger" name="forcetrigger" value="valve1" onclick="forceValve(this,0);">
+										<input type="radio" id="valve1trigger" name="forcetrigger" value="valve1" style="margin-left:10;" onclick="forceValve(this,0);">
 										<label for="valve1trigger" class="header">Valve 1</label><br><br>
-										<input type="radio" id="valve2trigger" name="forcetrigger" value="valve2"  onclick="forceValve(this,1);">
+										<input type="radio" id="valve2trigger" name="forcetrigger" value="valve2" style="margin-left:10;" onclick="forceValve(this,1);">
 										<label for="valve2trigger" class="header">Valve 2</label><br><br>
 									</fieldset>
 								</td>
@@ -108,10 +108,10 @@
 		</form>	
 	</div>
 	<div>
-		<textarea id="log" rows="12"  style = "width:100%; height:20vh; font-size: 0.3em;" readonly>Retrieving log...</textarea>
+		<textarea id="log" rows="12"  style = "width:100%; height:20vh; font-size: 0.27em;" readonly>Retrieving log...</textarea>
 	</div>
 	<div>
-    	<iframe id="grafana_iframe" src="http://pi00:3000/d/95wZWikRz/piwaterflow?from=now-24h&to=now&orgId=1&viewPanel=2" style = "width:100%; height:30vh";></iframe>
+		<iframe id="grafana_iframe" src="http://pi00:3000/d-solo/95wZWikRz/piwaterflow?orgId=1&from=now-24h&to=now&panelId=2" width="100%" height="30%" frameborder="0"></iframe>
 	</div>
 	<script type="text/javascript" src="static/js/code.js"></script>
 	</body>

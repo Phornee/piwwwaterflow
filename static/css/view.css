@@ -79,11 +79,11 @@ td
 .copperround
 {
     border-width: 2px;
-    border-radius: 15px;
-	border-bottom:2px solid #222222;
-	border-left:2px solid #DFDFDF;
-	border-right:2px solid #222222;
-	border-top:2px solid #DFDFDF;
+    border-radius: 10px;
+	border-bottom:3px solid #222222;
+	border-left:3px solid #EFDFDF;
+	border-right:3px solid #111111;
+	border-top:3px solid #DFCFCF;
     background-image: linear-gradient(to bottom right, #332822 , #8F857F);
 }
 
@@ -98,11 +98,11 @@ fieldset
     height: 100%;
     padding: 0px;
     border-width: 2px;
-    border-radius: 15px;
-    border-top:2px solid #DFDFDF;
-    border-left:2px solid #DFDFDF;
-    border-right:2px solid #222222;
-    border-bottom:2px solid #222222;
+    border-radius: 10px;
+    border-top:3px solid #DFDFDF;
+    border-left:3px solid #EFEFEF;
+    border-right:3px solid #111111;
+    border-bottom:3px solid #222222;
 
 }
 
@@ -135,13 +135,12 @@ fieldset
 
 .form_description
 {
-	border-bottom:1px dotted #ccc;
 	clear:both;
 	display:inline-block;
 	margin:5 0 1em;
 }
 
-.form_description p
+.form_description label
 {
 	font-size:50%;
 	line-height:130%;
@@ -243,6 +242,7 @@ legend.fieldsetheader
 .timeclass
 {
     color: inherit;
+    text-shadow: 1px 1px 2px black;
 	font-size:4vh;
 	width: 100%;
 	height: 6vh;
@@ -254,6 +254,7 @@ legend.fieldsetheader
 input.number
 {
     color: inherit;
+    text-shadow: 1px 1px 2px black;
 	font-size:4vh;
 	width: 100%;
 	height: 6vh;

@@ -84,7 +84,7 @@ function update(){
         else
         {
             document.getElementById('status').innerHTML = "Status: Waterflow loop running OK. (" + timestring + ")"
-            document.getElementById('status').style.color = '#7F7F7F'
+            document.getElementById('status').style.color = 'inherited'
         }
     }
     requestservice.send();
@@ -147,6 +147,31 @@ function update(){
         }
     }
     requestforced.send();
+
+
+    let requestconfig = new XMLHttpRequest();
+    requestconfig.open('GET', '/config');
+    requestconfig.responseType = 'text';
+    requestconfig.onload = function() {
+        if (requestconfig.response!='null'){
+            var forcedObj = JSON.parse(requestconfig.response);
+            time1 = document.getElementById("time1");
+            time1.value = forcedObj.programs[0].start_time;
+            valve11 = document.getElementById("valve11");
+            valve11.value = forcedObj.programs[0].valves_times[0]
+            valve12 = document.getElementById("valve12");
+            valve12.value = forcedObj.programs[0].valves_times[1]
+
+            time1 = document.getElementById("time2");
+            time1.value = forcedObj.programs[1].start_time;
+            valve11 = document.getElementById("valve21");
+            valve11.value = forcedObj.programs[1].valves_times[0]
+            valve12 = document.getElementById("valve22");
+            valve12.value = forcedObj.programs[1].valves_times[1]
+
+        }
+    }
+    requestconfig.send();
 
 }
 
