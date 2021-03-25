@@ -55,123 +55,93 @@ function resetForceTriggers(){
         }
 }
 
+function activateForceTrigger(controlname){
+    control = document.getElementById(controlname);
+    control.checked = true;
+    control.labels.item(0).style.color = '#22FF22'
+}
 
 function update(){
-    let requestlog = new XMLHttpRequest();
-    requestlog.open('GET', '/log');
-    requestlog.responseType = 'text';
-    requestlog.onload = function() {
-        logtextarea = document.getElementById("log");
-        atbottom = ((logtextarea.scrollHeight - logtextarea.scrollTop) <= logtextarea.clientHeight);
-        logtextarea.value = requestlog.response;
-        if (atbottom) {
-            logtextarea.scrollTop = logtextarea.scrollHeight;
-        }
-    };
-    requestlog.send();
-
     let requestservice = new XMLHttpRequest();
     requestservice.open('GET', '/service');
-    requestservice.responseType = 'text';
+    requestservice.responseType = 'json';
     requestservice.onload = function() {
         var d = new Date();
         var timestring = d.toLocaleTimeString();
-        if (requestservice.response=='false')
+        var statuscontrol = document.getElementById('status');
+        if (requestservice.response.alive==false)
         {
-            document.getElementById('status').innerHTML = "Status: Waterflow loop NOT running!!! (" + timestring + ")"
-            document.getElementById('status').style.color = '#FF2222'
+            statuscontrol.innerHTML = "Status: Waterflow loop NOT running!!! (" + timestring + ")"
+            statuscontrol.style.color = '#FF2222'
         }
         else
         {
-            document.getElementById('status').innerHTML = "Status: Waterflow loop running OK. (" + timestring + ")"
-            document.getElementById('status').style.color = 'inherited'
+            statuscontrol.innerHTML = "Status: Waterflow loop running OK. (" + timestring + ")"
+            statuscontrol.style.color = 'inherited'
         }
-    }
-    requestservice.send();
 
-    let requeststop = new XMLHttpRequest();
-    requeststop.open('GET', '/stop');
-    requeststop.responseType = 'text';
-    requeststop.onload = function() {
-        if (requeststop.response=='false'){
+        logtextarea = document.getElementById("log");
+        atbottom = ((logtextarea.scrollHeight - logtextarea.scrollTop) <= logtextarea.clientHeight);
+        logtextarea.value = requestservice.response.log;
+        if (atbottom) {
+            logtextarea.scrollTop = logtextarea.scrollHeight;
+        }
+
+        if (requestservice.response.stop==false){
             document.getElementById('stop').disabled = false
         }
         else{
             document.getElementById('stop').disabled = true
         }
-    }
-    requeststop.send();
 
-
-    resetForceTriggers();
-
-    let requestforced = new XMLHttpRequest();
-    requestforced.open('GET', '/force');
-    requestforced.responseType = 'text';
-    requestforced.onload = function() {
-        if (requestforced.response!="null"){
-            var forcedObj = JSON.parse(requestforced.response);
+        resetForceTriggers();
+        var forcedObj = requestservice.response.forced;
+        if (forcedObj!=null){
             setEnableForceFieldset(false);
 
             if (forcedObj.type=='program'){
                 if (forcedObj.value == 0){
-                    program1t = document.getElementById("program1trigger");
-                    program1t.checked = true;
-                    program1t.labels.item(0).style.color = '#22FF22'
+                    activateForceTrigger("program1trigger");
                 }
                 else{
-                    program2t = document.getElementById("program2trigger");
-                    program2t.checked = true;
-                    program2t.labels.item(0).style.color = '#22FF22'
+                    activateForceTrigger("program2trigger");
                 }
             }
             else{
                 if (forcedObj.value == 0){
-                    valve1t = document.getElementById("valve1trigger");
-                    valve1t.checked = true;
-                    valve1t.labels.item(0).style.color = '#22FF22'
+                    activateForceTrigger("valve1trigger");
                 }
                 else{
-                    valve2t = document.getElementById("valve2trigger");
-                    valve2t.checked = true;
-                    valve2t.labels.item(0).style.color = '#22FF22'
+                    activateForceTrigger("valve2trigger");
                 }
             }
         }
         else{
             setEnableForceFieldset(true)
-            var x = document.getElementsByName('forcetrigger');
-            for (var i = 0; i < x.length; i++) {
-                x[i].checked = false;
-            }
         }
-    }
-    requestforced.send();
 
-
-    let requestconfig = new XMLHttpRequest();
-    requestconfig.open('GET', '/config');
-    requestconfig.responseType = 'text';
-    requestconfig.onload = function() {
-        if (requestconfig.response!='null'){
-            var forcedObj = JSON.parse(requestconfig.response);
+        var configObj = requestservice.response.config;
+        if (configObj!=null){
             time1 = document.getElementById("time1");
-            time1.value = forcedObj.programs[0].start_time;
+            time1.value = configObj.programs[0].start_time;
             valve11 = document.getElementById("valve11");
-            valve11.value = forcedObj.programs[0].valves_times[0]
+            valve11.value = configObj.programs[0].valves_times[0]
             valve12 = document.getElementById("valve12");
-            valve12.value = forcedObj.programs[0].valves_times[1]
+            valve12.value = configObj.programs[0].valves_times[1]
+            prog1enabled = document.getElementById("prog1enabled");
+            prog1enabled.checked = configObj.programs[0].enabled;
 
             time1 = document.getElementById("time2");
-            time1.value = forcedObj.programs[1].start_time;
+            time1.value = configObj.programs[1].start_time;
             valve11 = document.getElementById("valve21");
-            valve11.value = forcedObj.programs[1].valves_times[0]
+            valve11.value = configObj.programs[1].valves_times[0]
             valve12 = document.getElementById("valve22");
-            valve12.value = forcedObj.programs[1].valves_times[1]
-
+            valve12.value = configObj.programs[1].valves_times[1]
+            prog2enabled = document.getElementById("prog2enabled");
+            prog2enabled.checked = configObj.programs[1].enabled;
         }
     }
-    requestconfig.send();
+    requestservice.send();
 
 }
 
