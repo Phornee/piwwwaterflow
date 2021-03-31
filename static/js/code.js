@@ -1,3 +1,21 @@
+function setEnableForceFieldset(enable){
+    document.getElementById("forceFieldset").disabled = !enable
+}
+
+function resetForceTriggers(){
+    var x = document.getElementsByName('forcetrigger');
+    for (var i = 0; i < x.length; i++) {
+        x[i].checked = false;
+        x[i].labels.item(0).style.color = 'inherit'
+        }
+}
+
+function activateForceTrigger(controlname){
+    control = document.getElementById(controlname);
+    control.checked = true;
+    control.labels.item(0).style.color = '#22FF22'
+}
+
 const inputs = document.querySelectorAll("input");
 
 function saveCurrent() {
@@ -33,93 +51,62 @@ function setEnabled() {
 
 document.addEventListener("input", setEnabled);
 
-saveCurrent();
-setEnabled();
-
-function setEnableInstantActions(enable){
-    document.getElementById("force1").disabled = !enable
-    document.getElementById("force1").hidden = !enable
-    document.getElementById("force2").disabled = !enable
-    document.getElementById("force2").hidden = !enable
-}
-
-function setEnableForceFieldset(enable){
-    document.getElementById("forceFieldset").disabled = !enable
-}
-
-function resetForceTriggers(){
-    var x = document.getElementsByName('forcetrigger');
-    for (var i = 0; i < x.length; i++) {
-        x[i].checked = false;
-        x[i].labels.item(0).style.color = 'inherit'
-        }
-}
-
-function activateForceTrigger(controlname){
-    control = document.getElementById(controlname);
-    control.checked = true;
-    control.labels.item(0).style.color = '#22FF22'
-}
-
-function update(){
+function update(first_time){
     let requestservice = new XMLHttpRequest();
     requestservice.open('GET', '/service');
     requestservice.responseType = 'json';
     requestservice.onload = function() {
+
+        // Status line update
         var d = new Date();
         var timestring = d.toLocaleTimeString();
         var statuscontrol = document.getElementById('status');
-        if (requestservice.response.alive==false)
-        {
+        if (requestservice.response.alive==false) {
             statuscontrol.innerHTML = "Status: Waterflow loop NOT running!!! (" + timestring + ")"
             statuscontrol.style.color = '#FF2222'
         }
-        else
-        {
+        else {
             statuscontrol.innerHTML = "Status: Waterflow loop running OK. (" + timestring + ")"
             statuscontrol.style.color = 'inherited'
         }
 
+        // Log textarea update
         logtextarea = document.getElementById("log");
         atbottom = ((logtextarea.scrollHeight - logtextarea.scrollTop) <= logtextarea.clientHeight);
         logtextarea.value = requestservice.response.log;
-        if (atbottom) {
+        if (atbottom)
             logtextarea.scrollTop = logtextarea.scrollHeight;
-        }
 
-        if (requestservice.response.stop==false){
+        // Stop button update
+        if (requestservice.response.stop==false)
             document.getElementById('stop').disabled = false
-        }
-        else{
+        else
             document.getElementById('stop').disabled = true
-        }
 
+        // Force triggers update
         resetForceTriggers();
         var forcedObj = requestservice.response.forced;
         if (forcedObj!=null){
             setEnableForceFieldset(false);
 
             if (forcedObj.type=='program'){
-                if (forcedObj.value == 0){
+                if (forcedObj.value == 0)
                     activateForceTrigger("program1trigger");
-                }
-                else{
+                else
                     activateForceTrigger("program2trigger");
-                }
             }
             else{
-                if (forcedObj.value == 0){
+                if (forcedObj.value == 0)
                     activateForceTrigger("valve1trigger");
-                }
-                else{
+                else
                     activateForceTrigger("valve2trigger");
-                }
             }
         }
         else{
             setEnableForceFieldset(true)
         }
 
+        // Controls update
         var configObj = requestservice.response.config;
         if (configObj!=null){
             time1 = document.getElementById("time1");
@@ -139,15 +126,20 @@ function update(){
             valve12.value = configObj.programs[1].valves_times[1]
             prog2enabled = document.getElementById("prog2enabled");
             prog2enabled.checked = configObj.programs[1].enabled;
+
+            if (first_time) {
+                saveCurrent();
+                setEnabled();
+            }
+
         }
     }
     requestservice.send();
 
 }
 
-update();
-
-setInterval("update();",30000);
+update(true);
+setInterval("update(false);",30000);
 
 function forceProgram(control, program_forced){
     if (confirm("Are you sure you want to force program?.")) {
@@ -204,15 +196,3 @@ function stopWaterflow(button){
     button.disabled = true;
 }
 
-function handleTriggerValve(trigger_radio, valve){
-    alert('New value: ' + trigger_radio.value);
-    if (valve!=0)
-    {
-        forceProgram(-valve)
-    }
-    else
-    {
-        setEnableInstantActions(true)
-        setEnableForceValve(true)
-    }
-}
