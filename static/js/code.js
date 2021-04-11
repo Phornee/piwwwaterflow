@@ -28,28 +28,28 @@ function saveCurrent() {
    }
 }
 
-function setEnabled() {
-  var e = false;
+function setEnabled(e) {
+  var changed = false;
   for (const el of inputs) {
     if (el.type == 'checkbox')
     {
         if (el.oldValue !== el.checked) {
-            e = true;
+            changed = true;
             break;
         }
     }
     else
     {
         if (el.oldValue !== el.value) {
-            e = true;
+            changed = true;
             break;
         }
     }
   }
-  document.getElementById("saveForm").disabled = !e;
+  document.getElementById("saveForm").disabled = !changed;
 }
 
-document.addEventListener("input", setEnabled);
+document.addEventListener("change", setEnabled);
 
 function update(first_time){
     let requestservice = new XMLHttpRequest();
