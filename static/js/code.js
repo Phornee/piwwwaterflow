@@ -157,7 +157,7 @@ function forceProgram(control, program_forced){
 
         requestservice.send(data);
 
-        control.style.color = '#00FF00'
+        control.labels.item(0).style.color = '#22FF22'
         setEnableForceFieldset(false)
     }
     else {
@@ -181,7 +181,7 @@ function forceValve(control, valve_forced){
 
         requestservice.send(data);
 
-        control.style.color = '#00FF00'
+        control.labels.item(0).style.color = '#22FF22'
         setEnableForceFieldset(false)
     }
     else {
