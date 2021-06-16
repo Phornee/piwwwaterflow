@@ -53,7 +53,8 @@ document.addEventListener("change", setEnabled);
 
 function update(first_time){
     let requestservice = new XMLHttpRequest();
-    requestservice.open('GET', '/service');
+    // Add timestamp to avoid caching
+    requestservice.open('GET', '/service?' + (new Date()).getTime());
     requestservice.responseType = 'json';
     requestservice.onload = function() {
 
