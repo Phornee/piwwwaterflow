@@ -57,17 +57,32 @@ function update(first_time){
     requestservice.open('GET', '/service?' + (new Date()).getTime());
     requestservice.responseType = 'json';
     requestservice.onload = function() {
+        // Version label update
+        var versionlabel = document.getElementById('version');
+        frontend = '1.1.0'
+        backend = requestservice.response.version
+        versionlabel.textContent = `PiWaterflow ${frontend} (Backend ${backend})`
 
         // Status line update
-        var d = new Date();
-        var timestring = d.toLocaleTimeString();
+        now = new Date()
+        nowUTCtimestamp = now.getTime();
+        lastlooptime = new Date(requestservice.response.lastlooptime)
+        lastlooptimeUTCtimestamp = lastlooptime.getTime()
         var statuscontrol = document.getElementById('status');
-        if (requestservice.response.alive==false) {
-            statuscontrol.innerHTML = "Status: Waterflow loop NOT running!!! (" + timestring + ")"
+        lapse = nowUTCtimestamp - lastlooptimeUTCtimestamp
+
+        date = ("0" + lastlooptime.getDate()).slice(-2);
+        month = ("0" + (lastlooptime.getMonth() + 1)).slice(-2);
+        formattedDate =  lastlooptime.getFullYear()+ "-" + month + "-" + date + " " +
+                         lastlooptime.getHours()+ ":"+ lastlooptime.getMinutes() +":"+lastlooptime.getSeconds();
+
+        lapseseconds = Math.trunc(lapse/1000)
+        if ( lapseseconds > 10*60){
+            statuscontrol.innerHTML = "Status: Waterflow loop NOT running! (since " + formattedDate + " ... " + lapseseconds + " seconds ago)"
             statuscontrol.style.color = '#FF2222'
         }
         else {
-            statuscontrol.innerHTML = "Status: Waterflow loop running OK. (" + timestring + ")"
+            statuscontrol.innerHTML = "Status: Waterflow loop running OK. (" + formattedDate + " ... " + lapseseconds + " seconds ago)"
             statuscontrol.style.color = 'inherited'
         }
 
