@@ -51,6 +51,33 @@ function setEnabled(e) {
 
 document.addEventListener("change", setEnabled);
 
+function datestringFromDate(dateobject){
+    date = ("0" + dateobject.getDate()).slice(-2);
+    month = ("0" + (dateobject.getMonth() + 1)).slice(-2);
+    hours = ("0" + (dateobject.getHours())).slice(-2);
+    minutes = ("0" + (dateobject.getMinutes())).slice(-2);
+    seconds = ("0" + (dateobject.getSeconds())).slice(-2);
+    formattedDate =  dateobject.getFullYear()+ "-" + month + "-" + date + " " + hours + ":"+ minutes + ":" + seconds;
+    return formattedDate
+}
+String.prototype.replaceAt = function(index, replacement) {
+    return this.substr(0, index) + replacement + this.substr(index + replacement.length);
+}
+
+function readableDay(original, start, end, formattedNow, formattedTomorrow){
+    if (original.slice(start, end) == formattedNow){
+        return original.replaceAt(start,'Today     ')
+    }
+    else{
+        if (original.slice(start, end) == formattedTomorrow){
+            return original.replaceAt(start,'Tomorrow  ')
+        }
+        else{
+            return original
+        }
+    }
+}
+
 function update(first_time){
     let requestservice = new XMLHttpRequest();
     // Add timestamp to avoid caching
@@ -59,37 +86,54 @@ function update(first_time){
     requestservice.onload = function() {
         // Version label update
         var versionlabel = document.getElementById('version');
-        frontend = '1.1.0'
+        frontend = '1.1.1'
         backend = requestservice.response.version
         versionlabel.textContent = `PiWaterflow ${frontend} (Backend ${backend})`
 
         // Status line update
         now = new Date()
+        formattedNow = datestringFromDate(now).slice(0,10)
+        tomorrow = new Date(now.getTime())
+        tomorrow.setDate(now.getDate() + 1)
+        formattedTomorrow = datestringFromDate(tomorrow).slice(0,10)
+
         nowUTCtimestamp = now.getTime();
         lastlooptime = new Date(requestservice.response.lastlooptime)
         lastlooptimeUTCtimestamp = lastlooptime.getTime()
+
+        formattedLastLoopDate =  datestringFromDate(lastlooptime)
+
+        // Remove date info, if its today... and keep only time info
+        if (formattedLastLoopDate.slice(0,10) == formattedNow)
+            formattedLastLoopDate = formattedLastLoopDate.slice(11,)
+
         var statuscontrol = document.getElementById('status');
-        lapse = nowUTCtimestamp - lastlooptimeUTCtimestamp
-
-        date = ("0" + lastlooptime.getDate()).slice(-2);
-        month = ("0" + (lastlooptime.getMonth() + 1)).slice(-2);
-        formattedDate =  lastlooptime.getFullYear()+ "-" + month + "-" + date + " " +
-                         lastlooptime.getHours()+ ":"+ lastlooptime.getMinutes() +":"+lastlooptime.getSeconds();
-
-        lapseseconds = Math.trunc(lapse/1000)
+        lapseseconds = Math.trunc(nowUTCtimestamp - lastlooptimeUTCtimestamp/1000)
         if ( lapseseconds > 10*60){
-            statuscontrol.innerHTML = "Status: Waterflow loop NOT running! (since " + formattedDate + " ... " + lapseseconds + " seconds ago)"
+            statuscontrol.innerHTML = "Status: Waterflow loop NOT running! (since " + formattedLastLoopDate + " ... " + lapseseconds + " seconds ago)"
             statuscontrol.style.color = '#FF2222'
         }
         else {
-            statuscontrol.innerHTML = "Status: Waterflow loop running OK. (" + formattedDate + " ... " + lapseseconds + " seconds ago)"
+            statuscontrol.innerHTML = "Status: Waterflow loop running OK. (" + formattedLastLoopDate + " ... " + lapseseconds + " seconds ago)"
             statuscontrol.style.color = 'inherited'
         }
 
         // Log textarea update
         logtextarea = document.getElementById("log");
         atbottom = ((logtextarea.scrollHeight - logtextarea.scrollTop) <= logtextarea.clientHeight);
-        logtextarea.value = requestservice.response.log;
+
+        var newlines = "";
+        var lines = requestservice.response.log.split('\n');
+
+        for(var i = 0;i < lines.length;i++){
+            newstring = readableDay(lines[i], 0, 10, formattedNow, formattedTomorrow)
+            if (lines[i].slice(20,24) == 'Next'){
+                newstring = readableDay(newstring, 34, 44, formattedNow, formattedTomorrow)
+            }
+            newlines += newstring + '\n'
+        }
+
+        logtextarea.value = newlines;
         if (atbottom)
             logtextarea.scrollTop = logtextarea.scrollHeight;
 
