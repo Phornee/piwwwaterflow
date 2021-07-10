@@ -97,9 +97,7 @@ function update(first_time){
         tomorrow.setDate(now.getDate() + 1)
         formattedTomorrow = datestringFromDate(tomorrow).slice(0,10)
 
-        nowUTCtimestamp = now.getTime();
         lastlooptime = new Date(requestservice.response.lastlooptime)
-        lastlooptimeUTCtimestamp = lastlooptime.getTime()
 
         formattedLastLoopDate =  datestringFromDate(lastlooptime)
 
@@ -107,8 +105,9 @@ function update(first_time){
         if (formattedLastLoopDate.slice(0,10) == formattedNow)
             formattedLastLoopDate = formattedLastLoopDate.slice(11,)
 
+        lapseseconds =  Math.trunc((now - lastlooptime)/1000)
+
         var statuscontrol = document.getElementById('status');
-        lapseseconds = Math.trunc(nowUTCtimestamp - lastlooptimeUTCtimestamp/1000)
         if ( lapseseconds > 10*60){
             statuscontrol.innerHTML = "Status: Waterflow loop NOT running! (since " + formattedLastLoopDate + " ... " + lapseseconds + " seconds ago)"
             statuscontrol.style.color = '#FF2222'
