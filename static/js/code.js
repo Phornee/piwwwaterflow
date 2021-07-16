@@ -60,17 +60,17 @@ function datestringFromDate(dateobject){
     formattedDate =  dateobject.getFullYear()+ "-" + month + "-" + date + " " + hours + ":"+ minutes + ":" + seconds;
     return formattedDate
 }
-String.prototype.replaceAt = function(index, replacement) {
-    return this.substr(0, index) + replacement + this.substr(index + replacement.length);
+String.prototype.replaceAt = function(index, sourcelength, replacement) {
+    return this.substr(0, index) + replacement + this.substr(index + sourcelength);
 }
 
 function readableDay(original, start, end, formattedNow, formattedTomorrow){
     if (original.slice(start, end) == formattedNow){
-        return original.replaceAt(start,'Today     ')
+        return original.replaceAt(start, 10, 'Today')
     }
     else{
         if (original.slice(start, end) == formattedTomorrow){
-            return original.replaceAt(start,'Tomorrow  ')
+            return original.replaceAt(start, 10, 'Tomorrow')
         }
         else{
             return original
@@ -86,7 +86,7 @@ function update(first_time){
     requestservice.onload = function() {
         // Version label update
         var versionlabel = document.getElementById('version');
-        frontend = '1.1.1'
+        frontend = '1.1.2'
         backend = requestservice.response.version
         versionlabel.textContent = `PiWaterflow ${frontend} (Backend ${backend})`
 
@@ -125,10 +125,10 @@ function update(first_time){
         var lines = requestservice.response.log.split('\n');
 
         for(var i = 0;i < lines.length;i++){
-            newstring = readableDay(lines[i], 0, 10, formattedNow, formattedTomorrow)
             if (lines[i].slice(20,24) == 'Next'){
-                newstring = readableDay(newstring, 34, 44, formattedNow, formattedTomorrow)
+                newstring = readableDay(lines[i], 34, 44, formattedNow, formattedTomorrow)
             }
+            newstring = readableDay(newstring, 0, 10, formattedNow, formattedTomorrow)
             newlines += newstring + '\n'
         }
 
