@@ -18,77 +18,69 @@
 				<label id = 'status'>Status: Retrieving status...</label>
 			</div>
 
-			<table class="table" id="tablacontroles"  style="width:100%; height:33%">
-				<tr style="height:90%;">
+			<table class="table" id="tablacontroles"  style="width:100%">
+				<tr>
 					<td>
 						<table id="programsandforce" style="width:100%;height:100%; border-bottom:1px dotted #ccc;">
 							<tr>
-								<td style="width:80%;">
-									<table class="table" id="programstable" style="width:100%; height:100%;">
-										<tr border="0px" id="prog1row" style="height:45%;">
-											<td border="0px">
-												<fieldset>
-													<legend class="fieldsetheader"> Program 1</legend>
-													<span class="spantime">
-														<label class="programheader">Start </label>
-														<input type="time" class="timeclass copperround" id="time1" name="time1" required>
-													</span>
-													<span class="spanvalve">
-														<label class="programheader" >Valve 1</label>
-														<input id="valve11" name="valve11" class="number copperround" type="number"  min="0" max="10">
-													</span>
-													<span class="spanvalve">
-														<label class="programheader" >Valve 2</label>
-														<input id="valve12" name="valve12" class="number copperround" type="number" min="0" max="10">
-													</span>
-													<span class="spanenabled">
-														<input type="checkbox" id="prog1enabled" name="prog1enabled" value="True" class="checkstyle">
-													</span>
-												</fieldset>
-											</td>
+								<td>
+									<table class="table" id="programstable" style="height:100%;" cellpadding="0" cellspacing="5">
+										<tr border="0px" id="headers">
+											<th width="10%"></th>
+											<th width="30%">
+												<label class="programheader">Start time </label>
+											</th>
+											<th width="30%">
+												<label class="programheader" id="valve1trigger" onclick="forceValve(this,0)">Valve 1</label>
+											</th>
+											<th width="30%">
+												<label class="programheader" id="valve2trigger" onclick="forceValve(this,1)">Valve 2</label>
+											</th >
+											<th width="5%">
+												<label class="programheader" >Enabled</label>
+											</th>
 										</tr>
-										<tr border="0" id="prog2row" style="height:45%;">
+										<tr border="0px" id="prog1row">
 											<td>
-												<fieldset>
-													<legend class="fieldsetheader">Program 2</legend>
-													<span class="spantime">
-														<label class="programheader">Start </label>
-														<input type="time" class="timeclass copperround" id="time2" name="time2" required>
-													</span>
-													<span class="spanvalve">
-														<label class="programheader" >Valve 1</label>
-														<input id="valve21" name="valve21" class="number copperround"  type="number" min="0" max="10">
-													</span>
-													<span class="spanvalve">
-														<label class="programheader" >Valve 2</label>
-														<input id="valve22" name="valve22" class="number copperround"  type="number" min="0" max="10">
-													</span>
-													<span class="spanenabled">
-														<input type="checkbox" id="prog2enabled" name="prog2enabled" value="True" class="checkstyle">
-													</span>
-												</fieldset>
+												<label class="programheader" id="program1trigger" onclick="forceProgram(this,0)">Prog 1</label>
+											</td>
+											<td>
+												<input type="time" class="timeclass copperround" id="time1" name="time1" required>
+											</td>
+											<td>
+												<input id="valve11" name="valve11" class="number copperround" type="number"  min="0" max="10">
+											</td>
+											<td>
+												<input id="valve12" name="valve12" class="number copperround" type="number" min="0" max="10">
+											</td>
+											<td>
+												<input type="checkbox" id="prog1enabled" name="prog1enabled" value="True" class="checkstyle">
 											</td>
 										</tr>
-										<tr style="height:10%;">
+										<tr border="0px" id="prog2row">
+											<td>
+												<label class="programheader" id="program2trigger" onclick="forceProgram(this,1)">Prog 2</label>
+											</td>
+											<td>
+												<input type="time" class="timeclass copperround" id="time2" name="time2" required>
+											</td>
+											<td>
+												<input id="valve21" name="valve21" class="number copperround"  type="number" min="0" max="10">
+											</td>
+											<td>
+												<input id="valve22" name="valve22" class="number copperround"  type="number" min="0" max="10">
+											</td>
+											<td>
+												<input type="checkbox" id="prog2enabled" name="prog2enabled" value="True" class="checkstyle">
+											</td>
+										</tr>
+										<tr>
+											<td></td>
 											<td>
 												<input id="saveForm" class="button_text" type="submit" name="submit" value="Save Changes" />
 											</td>
 										</tr>
 									</table>
-								</td>
-								<td style='text-align:left;'>
-									<fieldset id="forceFieldset">
-										<legend class="fieldsetheader">Force</legend>
-										<br>
-										<input type="radio" id="program1trigger" name="forcetrigger" value="prog1" style="margin-left:10;" onclick="forceProgram(this,0);">
-										<label for="program1trigger" class="header">Prog 1</label><br><br>
-										<input type="radio" id="program2trigger" name="forcetrigger" value="prog2" style="margin-left:10;" onclick="forceProgram(this,1);">
-										<label for="program2trigger" class="header">Prog 2</label><br><br>
-										<input type="radio" id="valve1trigger" name="forcetrigger" value="valve1" style="margin-left:10;" onclick="forceValve(this,0);">
-										<label for="valve1trigger" class="header">Valve 1</label><br><br>
-										<input type="radio" id="valve2trigger" name="forcetrigger" value="valve2" style="margin-left:10;" onclick="forceValve(this,1);">
-										<label for="valve2trigger" class="header">Valve 2</label><br><br>
-									</fieldset>
 								</td>
 							</tr>
 						</table>
@@ -106,7 +98,7 @@
 		<textarea id="log" rows="12"  style = "width:100%; height:20vh; font-size: 0.27em;" readonly>Retrieving log...</textarea>
 	</div>
 	<div>
-		<iframe id="grafana_iframe" src="http://192.168.0.14:3000/d-solo/95wZWikRz/piwaterflow?orgId=1&from=now-24h&to=now&panelId=2" width="100%" height="30%" frameborder="0"></iframe>
+		<iframe id="grafana_iframe" src="http://192.168.0.14:3000/d-solo/95wZWikRz/piwaterflow?orgId=1&from=now-24h&to=now&panelId=2" width="100%" height="50%" frameborder="0"></iframe>
 	</div>
 	<script type="text/javascript" src="static/js/code.js"></script>
 	</body>

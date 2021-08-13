@@ -1,19 +1,25 @@
-function setEnableForceFieldset(enable){
-    document.getElementById("forceFieldset").disabled = !enable
+var forceTriggersEnabled = true
+
+function setEnableForceTriggers(enable){
+    forceTriggersEnabled = enable
 }
 
 function resetForceTriggers(){
-    var x = document.getElementsByName('forcetrigger');
+    document.getElementById('program1trigger').style.color = 'inherit';
+    document.getElementById('program2trigger').style.color = 'inherit';
+    document.getElementById('valve1trigger').style.color = 'inherit';
+    document.getElementById('valve2trigger').style.color = 'inherit';
+
+    /*var x = document.getElementsByName('forcetrigger');
     for (var i = 0; i < x.length; i++) {
         x[i].checked = false;
         x[i].labels.item(0).style.color = 'inherit'
-        }
+        }*/
 }
 
 function activateForceTrigger(controlname){
     control = document.getElementById(controlname);
-    control.checked = true;
-    control.labels.item(0).style.color = '#22FF22'
+    control.style.color = '#22FF22'
 }
 
 const inputs = document.querySelectorAll("input");
@@ -86,7 +92,7 @@ function update(first_time){
     requestservice.onload = function() {
         // Version label update
         var versionlabel = document.getElementById('version');
-        frontend = '1.1.2'
+        frontend = '1.2.1'
         backend = requestservice.response.version
         versionlabel.textContent = `PiWaterflow ${frontend} (Backend ${backend})`
 
@@ -127,8 +133,11 @@ function update(first_time){
         for(var i = 0;i < lines.length;i++){
             if (lines[i].slice(20,24) == 'Next'){
                 newstring = readableDay(lines[i], 34, 44, formattedNow, formattedTomorrow)
+                newstring = readableDay(newstring, 0, 10, formattedNow, formattedTomorrow)
             }
-            newstring = readableDay(newstring, 0, 10, formattedNow, formattedTomorrow)
+            else{
+                newstring = readableDay(lines[i], 0, 10, formattedNow, formattedTomorrow)
+            }
             newlines += newstring + '\n'
         }
 
@@ -146,7 +155,7 @@ function update(first_time){
         resetForceTriggers();
         var forcedObj = requestservice.response.forced;
         if (forcedObj!=null){
-            setEnableForceFieldset(false);
+            setEnableForceTriggers(false);
 
             if (forcedObj.type=='program'){
                 if (forcedObj.value == 0)
@@ -162,7 +171,7 @@ function update(first_time){
             }
         }
         else{
-            setEnableForceFieldset(true)
+            setEnableForceTriggers(true)
         }
 
         // Controls update
@@ -201,7 +210,7 @@ update(true);
 setInterval("update(false);",30000);
 
 function forceProgram(control, program_forced){
-    if (confirm("Are you sure you want to force program?.")) {
+    if (forceTriggersEnabled && confirm("Are you sure you want to force program?.")) {
         let requestservice = new XMLHttpRequest();
         requestservice.open('POST', '/force');
         requestservice.responseType = 'text';
@@ -216,8 +225,8 @@ function forceProgram(control, program_forced){
 
         requestservice.send(data);
 
-        control.labels.item(0).style.color = '#22FF22'
-        setEnableForceFieldset(false)
+        control.style.color = '#22FF22'
+        setEnableForceTriggers(false)
     }
     else {
         control.checked = false
@@ -225,7 +234,7 @@ function forceProgram(control, program_forced){
 }
 
 function forceValve(control, valve_forced){
-    if (confirm("Are you sure you want to force valve?.")) {
+    if (forceTriggersEnabled && confirm("Are you sure you want to force valve?.")) {
         let requestservice = new XMLHttpRequest();
         requestservice.open('POST', '/force');
         requestservice.responseType = 'text';
@@ -240,8 +249,8 @@ function forceValve(control, valve_forced){
 
         requestservice.send(data);
 
-        control.labels.item(0).style.color = '#22FF22'
-        setEnableForceFieldset(false)
+        control.style.color = '#22FF22'
+        setEnableForceTriggers(false)
     }
     else {
         control.checked = false
