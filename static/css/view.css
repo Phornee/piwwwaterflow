@@ -40,7 +40,7 @@ textarea#log {
 
 .mainheader
 {
-    background-image: linear-gradient(to bottom right, white , #CFCFCF);
+    background-image: linear-gradient(to bottom right, #343434 , #565656);
     color: #EFEFEF;
     text-shadow: 1px 1px 2px black, 0 0 25px black, 0 0 5px black;
 }

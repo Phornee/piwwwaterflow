@@ -1,4 +1,4 @@
-from piwaterflow import PiWWWaterflowService
+from piwaterflow.webservice import PiWWWaterflowService
 from pathlib import Path
 
 def create_app():

@@ -92,7 +92,7 @@ function update(first_time){
     requestservice.onload = function() {
         // Version label update
         var versionlabel = document.getElementById('version');
-        frontend = '1.2.3'
+        frontend = '1.2.4'
         backend = requestservice.response.version
         versionlabel.textContent = `PiWaterflow ${frontend} (Backend ${backend})`
 
