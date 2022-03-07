@@ -92,7 +92,7 @@ function update(first_time){
     requestservice.onload = function() {
         // Version label update
         var versionlabel = document.getElementById('version');
-        frontend = '1.2.4'
+        frontend = '1.3.0'
         backend = requestservice.response.version
         versionlabel.textContent = `PiWaterflow ${frontend} (Backend ${backend})`
 
@@ -207,7 +207,7 @@ function update(first_time){
 }
 
 update(true);
-setInterval("update(false);",30000);
+setInterval("update(false);",930000);
 
 function forceProgram(control, program_forced){
     if (forceTriggersEnabled && confirm("Are you sure you want to force program?.")) {
