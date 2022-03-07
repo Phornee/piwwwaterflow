@@ -207,7 +207,7 @@ function update(first_time){
 }
 
 update(true);
-setInterval("update(false);",930000);
+setInterval("update(false);",30000);
 
 function forceProgram(control, program_forced){
     if (forceTriggersEnabled && confirm("Are you sure you want to force program?.")) {
