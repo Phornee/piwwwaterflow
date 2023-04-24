@@ -1,10 +1,12 @@
 var forceTriggersEnabled = true
 
-function setEnableForceTriggers(enable){
+var socket = io();
+
+function _setEnableForceTriggers(enable){
     forceTriggersEnabled = enable
 }
 
-function resetForceTriggers(){
+function _resetForceTriggers(){
     document.getElementById('program1trigger').style.color = 'inherit';
     document.getElementById('program2trigger').style.color = 'inherit';
     document.getElementById('valve1trigger').style.color = 'inherit';
@@ -17,7 +19,7 @@ function resetForceTriggers(){
         }*/
 }
 
-function activateForceTrigger(controlname){
+function _activateForceTrigger(controlname){
     control = document.getElementById(controlname);
     control.style.color = '#22FF22'
 }
@@ -40,15 +42,15 @@ function setEnabled(e) {
     if (el.type == 'checkbox')
     {
         if (el.oldValue !== el.checked) {
+            el.changed = true
             changed = true;
-            break;
         }
     }
     else
     {
         if (el.oldValue !== el.value) {
+            el.changed= true
             changed = true;
-            break;
         }
     }
   }
@@ -57,7 +59,7 @@ function setEnabled(e) {
 
 document.addEventListener("change", setEnabled);
 
-function datestringFromDate(dateobject){
+function _datestringFromDate(dateobject){
     date = ("0" + dateobject.getDate()).slice(-2);
     month = ("0" + (dateobject.getMonth() + 1)).slice(-2);
     hours = ("0" + (dateobject.getHours())).slice(-2);
@@ -70,7 +72,7 @@ String.prototype.replaceAt = function(index, sourcelength, replacement) {
     return this.substr(0, index) + replacement + this.substr(index + sourcelength);
 }
 
-function readableDay(original, start, end, formattedNow, formattedTomorrow){
+function _readableDay(original, start, end, formattedNow, formattedTomorrow){
     if (original.slice(start, end) == formattedNow){
         return original.replaceAt(start, 10, 'Today')
     }
@@ -84,149 +86,143 @@ function readableDay(original, start, end, formattedNow, formattedTomorrow){
     }
 }
 
+socket.on('connect', function() {
+    update(true);
+});
+
 function update(first_time){
-    let requestservice = new XMLHttpRequest();
-    // Add timestamp to avoid caching
-    requestservice.open('GET', '/service?' + (new Date()).getTime());
-    requestservice.responseType = 'json';
-    requestservice.onload = function() {
-        // Version label update
-        var versionlabel = document.getElementById('version');
-        frontend = '1.3.2'
-        backend = requestservice.response.version
-        versionlabel.textContent = `PiWaterflow ${frontend} (Backend ${backend})`
+    socket.emit('service_request', {'first_time': first_time});
+}
 
-        // Status line update
-        now = new Date()
-        formattedNow = datestringFromDate(now).slice(0,10)
-        tomorrow = new Date(now.getTime())
-        tomorrow.setDate(now.getDate() + 1)
-        formattedTomorrow = datestringFromDate(tomorrow).slice(0,10)
+socket.on('service', function(response) {
+    // Version label update
+    var versionlabel = document.getElementById('version');
+    frontend = '1.3.2'
+    backend = response.version
+    versionlabel.textContent = `PiWaterflow ${frontend} (Backend ${backend})`
 
-        lastlooptime = new Date(requestservice.response.lastlooptime)
+    // Status line update
+    now = new Date()
+    formattedNow = _datestringFromDate(now).slice(0,10)
+    tomorrow = new Date(now.getTime())
+    tomorrow.setDate(now.getDate() + 1)
+    formattedTomorrow = _datestringFromDate(tomorrow).slice(0,10)
 
-        formattedLastLoopDate =  datestringFromDate(lastlooptime)
+    lastlooptime = new Date(response.lastlooptime)
 
-        // Remove date info, if its today... and keep only time info
-        if (formattedLastLoopDate.slice(0,10) == formattedNow)
-            formattedLastLoopDate = formattedLastLoopDate.slice(11,)
+    formattedLastLoopDate =  _datestringFromDate(lastlooptime)
 
-        lapseseconds =  Math.trunc((now - lastlooptime)/1000)
+    // Remove date info, if its today... and keep only time info
+    if (formattedLastLoopDate.slice(0,10) == formattedNow)
+        formattedLastLoopDate = formattedLastLoopDate.slice(11,)
 
-        var statuscontrol = document.getElementById('status');
-        if ( lapseseconds > 10*60){
-            statuscontrol.innerHTML = "Status: Waterflow loop NOT running! (since " + formattedLastLoopDate + " ... " + lapseseconds + " seconds ago)"
-            statuscontrol.style.color = '#FF2222'
-        }
-        else {
-            statuscontrol.innerHTML = "Status: Waterflow loop running OK. (" + formattedLastLoopDate + " ... " + lapseseconds + " seconds ago)"
-            statuscontrol.style.color = 'inherited'
-        }
+    lapseseconds =  Math.trunc((now - lastlooptime)/1000)
 
-        // Log textarea update
-        logtextarea = document.getElementById("log");
-        atbottom = ((logtextarea.scrollHeight - logtextarea.scrollTop) <= logtextarea.clientHeight);
+    var statuscontrol = document.getElementById('status');
+    if ( lapseseconds > 10*60){
+        statuscontrol.innerHTML = "Status: Waterflow loop NOT running! (since " + formattedLastLoopDate + " ... " + lapseseconds + " seconds ago)"
+        statuscontrol.style.color = '#FF2222'
+    }
+    else {
+        statuscontrol.innerHTML = "Status: Waterflow loop running OK. (" + formattedLastLoopDate + " ... " + lapseseconds + " seconds ago)"
+        statuscontrol.style.color = 'inherited'
+    }
 
-        var newlines = "";
-        var lines = requestservice.response.log.split('\n');
+    // Log textarea update
+    logtextarea = document.getElementById("log");
+    atbottom = ((logtextarea.scrollHeight - logtextarea.scrollTop) <= logtextarea.clientHeight);
 
-        for(var i = 0;i < lines.length;i++){
-            if (lines[i].slice(20,24) == 'Next'){
-                newstring = readableDay(lines[i], 34, 44, formattedNow, formattedTomorrow)
-                newstring = readableDay(newstring, 0, 10, formattedNow, formattedTomorrow)
-            }
-            else{
-                newstring = readableDay(lines[i], 0, 10, formattedNow, formattedTomorrow)
-            }
-            newlines += newstring + '\n'
-        }
+    var newlines = "";
+    var lines = response.log.split('\n');
 
-        logtextarea.value = newlines;
-        if (atbottom)
-            logtextarea.scrollTop = logtextarea.scrollHeight;
-
-        // Stop button update
-        if (requestservice.response.stop==false)
-            document.getElementById('stop').disabled = false
-        else
-            document.getElementById('stop').disabled = true
-
-        // Force triggers update
-        resetForceTriggers();
-        var forcedObj = requestservice.response.forced;
-        if (forcedObj!=null){
-            setEnableForceTriggers(false);
-
-            if (forcedObj.type=='program'){
-                if (forcedObj.value == 0)
-                    activateForceTrigger("program1trigger");
-                else
-                    activateForceTrigger("program2trigger");
-            }
-            else{
-                if (forcedObj.value == 0)
-                    activateForceTrigger("valve1trigger");
-                else
-                    activateForceTrigger("valve2trigger");
-            }
+    for(var i = 0;i < lines.length;i++){
+        if (lines[i].slice(20,24) == 'Next'){
+            newstring = _readableDay(lines[i], 34, 44, formattedNow, formattedTomorrow)
+            newstring = _readableDay(newstring, 0, 10, formattedNow, formattedTomorrow)
         }
         else{
-            setEnableForceTriggers(true)
+            newstring = _readableDay(lines[i], 0, 10, formattedNow, formattedTomorrow)
         }
+        newlines += newstring + '\n'
+    }
 
-        // Controls update
-        var configObj = requestservice.response.config;
-        if (configObj!=null){
-            time1 = document.getElementById("time1");
-            time1.value = configObj.programs[0].start_time;
-            valve11 = document.getElementById("valve11");
-            valve11.value = configObj.programs[0].valves_times[0]
-            valve12 = document.getElementById("valve12");
-            valve12.value = configObj.programs[0].valves_times[1]
-            prog1enabled = document.getElementById("prog1enabled");
-            prog1enabled.checked = configObj.programs[0].enabled;
+    logtextarea.value = newlines;
+    if (atbottom)
+        logtextarea.scrollTop = logtextarea.scrollHeight;
 
-            time1 = document.getElementById("time2");
-            time1.value = configObj.programs[1].start_time;
-            valve11 = document.getElementById("valve21");
-            valve11.value = configObj.programs[1].valves_times[0]
-            valve12 = document.getElementById("valve22");
-            valve12.value = configObj.programs[1].valves_times[1]
-            prog2enabled = document.getElementById("prog2enabled");
-            prog2enabled.checked = configObj.programs[1].enabled;
+    // Stop button update
+    if (response.stop==false)
+        document.getElementById('stop').disabled = false
+    else
+        document.getElementById('stop').disabled = true
 
-            if (first_time) {
-                saveCurrent();
-                setEnabled();
-            }
+    // Force triggers update
+    _resetForceTriggers();
+    var forcedObj = response.forced;
+    if (forcedObj!=null){
+        _setEnableForceTriggers(false);
 
+        if (forcedObj.type=='program'){
+            if (forcedObj.value == 0)
+                _activateForceTrigger("program1trigger");
+            else
+                _activateForceTrigger("program2trigger");
+        }
+        else{
+            if (forcedObj.value == 0)
+                _activateForceTrigger("valve1trigger");
+            else
+                _activateForceTrigger("valve2trigger");
         }
     }
-    requestservice.send();
+    else{
+        _setEnableForceTriggers(true)
+    }
 
-}
+    // Controls update
+    var configObj = response.config;
+    if (configObj!=null){
+        time1 = document.getElementById("time1");
+        if (!time1.changed)
+            time1.value = configObj.programs[0].start_time;
+        valve11 = document.getElementById("valve11");
+        if (!valve11.changed)
+            valve11.value = configObj.programs[0].valves_times[0]
+        valve12 = document.getElementById("valve12");
+        if (!valve12.changed)
+            valve12.value = configObj.programs[0].valves_times[1]
+        prog1enabled = document.getElementById("prog1enabled");
+        if (!prog1enabled.changed)
+            prog1enabled.checked = configObj.programs[0].enabled;
+
+        time1 = document.getElementById("time2");
+        if (!time1.changed)
+            time1.value = configObj.programs[1].start_time;
+        valve21 = document.getElementById("valve21");
+        if (!valve21.changed)
+            valve21.value = configObj.programs[1].valves_times[0]
+        valve22 = document.getElementById("valve22");
+        if (!valve22.changed)
+            valve22.value = configObj.programs[1].valves_times[1]
+        prog2enabled = document.getElementById("prog2enabled");
+        if (!prog2enabled.changed)
+            prog2enabled.checked = configObj.programs[1].enabled;
+
+        if (response.first_time) {
+            saveCurrent();
+            setEnabled();
+        }
+    }
+});
 
 update(true);
 setInterval("update(false);",30000);
 
 function forceProgram(control, program_forced){
     if (forceTriggersEnabled && confirm("Are you sure you want to force program?.")) {
-        let requestservice = new XMLHttpRequest();
-        requestservice.open('POST', '/force');
-        requestservice.responseType = 'text';
-        requestservice.onload = function() {
-            if (requestservice.response=='false'){
-
-            }
-        }
-        var data = new FormData();
-        data.append('type', 'program');
-        data.append('value', program_forced);
-
-        requestservice.send(data);
-
+        socket.emit('force', {'type': 'program', 'value': program_forced});
         control.style.color = '#22FF22'
-        setEnableForceTriggers(false)
+        _setEnableForceTriggers(false)
     }
     else {
         control.checked = false
@@ -235,22 +231,9 @@ function forceProgram(control, program_forced){
 
 function forceValve(control, valve_forced){
     if (forceTriggersEnabled && confirm("Are you sure you want to force valve?.")) {
-        let requestservice = new XMLHttpRequest();
-        requestservice.open('POST', '/force');
-        requestservice.responseType = 'text';
-        requestservice.onload = function() {
-            if (requestservice.response=='false'){
-
-            }
-        }
-        var data = new FormData();
-        data.append('type', 'valve');
-        data.append('value', valve_forced);
-
-        requestservice.send(data);
-
+        socket.emit('force', {'type': 'valve', 'value': valve_forced});
         control.style.color = '#22FF22'
-        setEnableForceTriggers(false)
+        _setEnableForceTriggers(false)
     }
     else {
         control.checked = false
@@ -258,9 +241,20 @@ function forceValve(control, valve_forced){
 }
 
 function stopWaterflow(button){
-    let requestservice = new XMLHttpRequest();
-    requestservice.open('POST', '/stop');
-    requestservice.send();
+    socket.emit('stop', {});
+    button.disabled = true;
+}
+
+function save(button){
+    socket.emit('save', {'prog1': {'time': document.getElementById("time1").value, 
+                                   'valve1': document.getElementById("valve11").value, 
+                                   'valve2': document.getElementById("valve12").value, 
+                                   'enabled': document.getElementById("prog1enabled").value}, 
+                         'prog2': {'time': document.getElementById("time2").value, 
+                                   'valve1': document.getElementById("valve21").value, 
+                                   'valve2': document.getElementById("valve12").value, 
+                                   'enabled': document.getElementById("prog2enabled").value}
+                        });
     button.disabled = true;
 }
 
