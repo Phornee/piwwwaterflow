@@ -6,7 +6,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name="piwwwaterflow",
-    version="0.1.2",
+    version="0.1.3",
     author="Ismael Raya",
     author_email="phornee@gmail.com",
     description="Raspberry Pi Waterflow resilient system",
@@ -15,8 +15,9 @@ setuptools.setup(
     url="https://github.com/Phornee/piwwwaterflow",
     packages=setuptools.find_packages(),
     package_data={
-        '': ['*.yml'],
-        'static': ['css/*.css', 'img/*.*', 'js/*.js'],
+        'static.css': ['*.css'],
+        'static.img': ['*.*'],
+        'static.js': ['*.js'],
         'templates': ['*.html'],
     },
     classifiers=[
