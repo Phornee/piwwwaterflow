@@ -1,3 +1,4 @@
+""" Pypi stup """
 import setuptools
 
 with open("README.md", "r", encoding="utf-8") as fh:
@@ -5,7 +6,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name="piwwwaterflow",
-    version="0.1.0",
+    version="0.1.1",
     author="Ismael Raya",
     author_email="phornee@gmail.com",
     description="Raspberry Pi Waterflow resilient system",
@@ -26,11 +27,10 @@ setuptools.setup(
         'Flask>=1.1.2',
         'flask-compress>=1.9.0',
         'importlib-metadata>=4.5.0',
-        'tzlocal>=4.1',
         'python-socketio>=5.8.0',
         'flask-socketio>=5.3.3',
         'eventlet>=0.33.3',
-        'piwaterflow>=0.5.0'
+        'piwaterflow>=0.5.2'
     ],
     python_requires='>=3.6',
 )

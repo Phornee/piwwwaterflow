@@ -88,9 +88,10 @@ function _readableDay(original, start, end, formattedNow, formattedTomorrow){
 socket.on('connect', function() {
     update(true);
 });
+setInterval("update(false);",30000);
 
 function update(first_time){
-    socket.emit('service_request', {'first_time': first_time}, function service(response){
+    socket.emit('service_request', function service(response){
         // Version label update
         var versionlabel = document.getElementById('version');
         frontend = '1.4.0'
@@ -204,16 +205,13 @@ function update(first_time){
             if (!prog2enabled.changed)
                 prog2enabled.checked = configObj.programs["second"].enabled;
 
-            if (response.first_time) {
+            if (first_time) { // Get this value from the closure (parameter in update function)
                 saveCurrentValues();
                 refreshSaveButton();
             }
         }
     });
 }
-
-update(true);
-setInterval("update(false);",30000);
 
 function forceProgram(control, program_forced){
     if (forceTriggersEnabled && confirm("Are you sure you want to force program?.")) {

@@ -47,14 +47,14 @@ class PiWWWaterflowService:
         del config['influxdbconn']
         return config
 
-    def on_service_request(self, data):
+    def on_service_request(self) -> dict:
+        """ Gets all the information from the waterflow service
+        Args:
+            data (dict):'first_time': This value is only bypassed to the caller
+        Returns:
+            dict:Dictionary with all the information about the status of the waterflow system
+        """
         print('Service requested...')
-        service_dict = self._get_service()
-        if 'first_time' in data:
-            service_dict['first_time'] = data['first_time']
-        return service_dict
-
-    def _get_service(self):
         try:
             ver = version('piwaterflow')
         except PackageNotFoundError:
@@ -72,7 +72,12 @@ class PiWWWaterflowService:
             program['start_time'] = program['start_time'].strftime('%H:%M')
         return responsedict
 
-    def on_force(self, data):
+    def on_force(self, data: dict):
+        """ On force action request
+        Args:
+            data (dict): 'type': Must be 'valve' or 'program'
+                         'value': Must be the index of the program or value to be forced
+        """
         print(f'Force requested... {data}')
         type_force = data['type']
         value_force = data['value']
