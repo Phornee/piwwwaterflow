@@ -14,6 +14,7 @@ setuptools.setup(
     long_description_content_type="text/markdown",
     url="https://github.com/Phornee/piwwwaterflow",
     packages=setuptools.find_packages(),
+    package_dir={'', 'piwwwaterflow'},
     package_data={
         'static.css': ['*.css'],
         'static.img': ['*.*'],
