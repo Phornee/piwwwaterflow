@@ -15,12 +15,6 @@ setuptools.setup(
     url="https://github.com/Phornee/piwwwaterflow",
     packages=setuptools.find_packages(),
     include_package_data=True,
-    package_data={
-        'static.css': ['*.css'],
-        'static.img': ['*.*'],
-        'static.js': ['*.js'],
-        'templates': ['*.html'],
-    },
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",
