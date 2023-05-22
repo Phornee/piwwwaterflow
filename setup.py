@@ -6,7 +6,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name="piwwwaterflow",
-    version="0.1.4",
+    version="0.1.5",
     author="Ismael Raya",
     author_email="phornee@gmail.com",
     description="Raspberry Pi Waterflow resilient system",
@@ -28,7 +28,8 @@ setuptools.setup(
         'python-socketio>=5.8.0',
         'flask-socketio>=5.3.3',
         'eventlet>=0.33.3',
-        'piwaterflow>=0.5.2'
+        'piwaterflow>=0.5.4',
+        'revproxy_auth>=0.1.1'
     ],
     python_requires='>=3.6',
 )

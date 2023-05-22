@@ -14,15 +14,12 @@ def create_service():
     return PiWWWaterflowService(template_folder=templates_path, static_folder=static_path)
 
 def create_app():
-    """ WSGI standard
-    Args:
-        environ (_type_): _description_
-        start_response (_type_): _description_
+    """ Creates a WSGI standard callable function
     Returns:
-        WSGI app
+        WSGI app provided by the PiWWWaterflowService/Flask
     """
     wtf_service = create_service()
-    return wtf_service.get_socket_app()
+    return wtf_service.get_app()
 
 # __main__ used for standalone execution (debugging). For WSGI call, the "wsgi:create_app()" function should be called
 if __name__ == '__main__':

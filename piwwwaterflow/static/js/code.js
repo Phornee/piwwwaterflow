@@ -88,6 +88,12 @@ function _readableDay(original, start, end, formattedNow, formattedTomorrow){
 socket.on('connect', function() {
     update(true);
 });
+
+socket.on('disconnect', function() {
+    document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; ";
+    location.reload();
+});
+
 setInterval("update(false);",30000);
 
 function update(first_time){
@@ -236,7 +242,7 @@ function forceValve(control, valve_forced){
 }
 
 function stopWaterflow(button){
-    socket.emit('stop', {});
+    socket.emit('stop');
     button.disabled = true;
 }
 
