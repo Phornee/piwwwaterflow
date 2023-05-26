@@ -29,7 +29,7 @@ setuptools.setup(
         'flask-socketio>=5.3.3',
         'eventlet>=0.33.3',
         'piwaterflow>=0.5.4',
-        'revproxy_auth>=0.1.6.2'
+        'revproxy_auth>=0.1.6'
     ],
     python_requires='>=3.6',
 )
