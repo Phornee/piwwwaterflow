@@ -24,4 +24,4 @@ def create_app():
 # __main__ used for standalone execution (debugging). For WSGI call, the "wsgi:create_app()" function should be called
 if __name__ == '__main__':
     service = create_service()
-    service.get_socket_app().run(service.app, host='0.0.0.0', port=5000, debug=True, use_reloader=False)
+    service.socketio.run(service.app, host='0.0.0.0', port=5000, debug=True, use_reloader=False)

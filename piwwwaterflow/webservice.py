@@ -21,7 +21,7 @@ class PiWWWaterflowService:
 
         self.app.add_url_rule('/', 'index', self.waterflow_endpoint, methods=['GET', 'POST'])
         Compress(self.app)
-        self.socketio = SocketIO(self.app)
+        self.socketio = SocketIO(self.app, cors_allowed_origins='*')
         self.socketio.on_event('service_request', self.on_service_request)
         self.socketio.on_event('force', self.on_force)
         self.socketio.on_event('stop', self.on_stop)
