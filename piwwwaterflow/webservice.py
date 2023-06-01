@@ -62,11 +62,11 @@ class PiWWWaterflowService:
                         'forced': self.waterflow.get_forced_info(),
                         'stop': self.waterflow.stop_requested(),
                         'config': self._get_public_config(),
-                        'lastlooptime': self.waterflow.last_loop_time().strftime('%Y-%m-%dT%H:%M:%S.000Z'),
+                        'lastlooptime': self.waterflow.last_loop_time().strftime('%Y-%m-%dT%H:%M:%S'),
                         'version': ver
                         }
         # Change to string so that javascript can manage with it
-        for program in responsedict['config']['programs'].values():
+        for program in responsedict['config']['programs']:
             program['start_time'] = program['start_time'].strftime('%H:%M')
         return responsedict
 
@@ -94,8 +94,8 @@ class PiWWWaterflowService:
             bool: If everything went ok
         """
         parsed_config = self.waterflow.config.get_dict_copy()
-        self._change_program(parsed_config['programs']['first'], data['prog1'])
-        self._change_program(parsed_config['programs']['second'], data['prog2'])
+        for program, update in zip(parsed_config['programs'], data):
+            self._change_program(program, update)
 
         self.waterflow.update_config(programs=parsed_config['programs'])
         return True
@@ -110,6 +110,6 @@ class PiWWWaterflowService:
         time1 = datetime.strptime(inputbox_text, '%H:%M')
         new_datetime = program['start_time'].replace(hour=time1.hour, minute=time1.minute)
         program['start_time'] = new_datetime
-        program['valves_times']['valve1'] = new_program['valve1']
-        program['valves_times']['valve2'] = new_program['valve2']
-        program['enabled'] = new_program['enabled'] is not None
+        program['valves'][0] = new_program['valves'][0]
+        program['valves'][1] = new_program['valves'][1]
+        program['enabled'] = new_program['enabled']

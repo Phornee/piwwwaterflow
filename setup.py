@@ -27,8 +27,8 @@ setuptools.setup(
         'importlib-metadata>=4.5.0',
         'python-socketio>=5.8.0',
         'flask-socketio>=5.3.3',
-        'eventlet>=0.33.3',
-        'piwaterflow>=0.5.4',
+        'eventlet>=0.30.2',
+        'piwaterflow>=0.5.9',
         'revproxy_auth>=0.1.6'
     ],
     python_requires='>=3.6',

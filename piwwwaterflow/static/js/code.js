@@ -6,6 +6,14 @@ function _setEnableForceTriggers(enable){
     forceTriggersEnabled = enable
 }
 
+function getProgramName(index){
+    return document.getElementById('program' + (index + 1) + 'trigger').textContent
+}
+
+function getValveName(index){
+    return document.getElementById('valve' + (index + 1) + 'trigger').textContent
+}
+
 function _resetForceTriggers(){
     document.getElementById('program1trigger').style.color = 'inherit';
     document.getElementById('program2trigger').style.color = 'inherit';
@@ -187,31 +195,37 @@ function update(first_time){
         if (configObj!=null){
             time1 = document.getElementById("time1");
             if (!time1.changed)
-                time1.value = configObj.programs["first"].start_time;
+                time1.value = configObj.programs[0].start_time;
             valve11 = document.getElementById("valve11");
             if (!valve11.changed)
-                valve11.value = configObj.programs["first"].valves_times['valve1']
+                valve11.value = configObj.programs[0].valves[0].time
             valve12 = document.getElementById("valve12");
             if (!valve12.changed)
-                valve12.value = configObj.programs["first"].valves_times['valve2']
+                valve12.value = configObj.programs[0].valves[1].time
             prog1enabled = document.getElementById("prog1enabled");
             if (!prog1enabled.changed)
-                prog1enabled.checked = configObj.programs["first"].enabled;
+                prog1enabled.checked = configObj.programs[0].enabled;
 
             time1 = document.getElementById("time2");
             if (!time1.changed)
-                time1.value = configObj.programs["second"].start_time;
+                time1.value = configObj.programs[1].start_time;
             valve21 = document.getElementById("valve21");
             if (!valve21.changed)
-                valve21.value = configObj.programs["second"].valves_times['valve1']
+                valve21.value = configObj.programs[1].valves[0].time
             valve22 = document.getElementById("valve22");
             if (!valve22.changed)
-                valve22.value = configObj.programs["second"].valves_times['valve2']
+                valve22.value = configObj.programs[1].valves[1].time
             prog2enabled = document.getElementById("prog2enabled");
             if (!prog2enabled.changed)
-                prog2enabled.checked = configObj.programs["second"].enabled;
+                prog2enabled.checked = configObj.programs[1].enabled;
 
             if (first_time) { // Get this value from the closure (parameter in update function)
+                // Set names of programs and valves
+                document.getElementById('program1trigger').textContent = configObj.programs[0].name;
+                document.getElementById('program2trigger').textContent = configObj.programs[1].name;
+                document.getElementById('valve1trigger').textContent = configObj.programs[0].valves[0].name;
+                document.getElementById('valve2trigger').textContent = configObj.programs[0].valves[1].name;
+
                 saveCurrentValues();
                 refreshSaveButton();
             }
@@ -247,15 +261,21 @@ function stopWaterflow(button){
 }
 
 function save(button){
-    socket.emit('save', {'prog1': {'time': document.getElementById("time1").value, 
-                                   'valve1': parseInt(document.getElementById("valve11").value), 
-                                   'valve2': parseInt(document.getElementById("valve12").value), 
-                                   'enabled': document.getElementById("prog1enabled").value}, 
-                         'prog2': {'time': document.getElementById("time2").value, 
-                                   'valve1': parseInt(document.getElementById("valve21").value), 
-                                   'valve2': parseInt(document.getElementById("valve12").value), 
-                                   'enabled': document.getElementById("prog2enabled").value}
-                        }, function ack(result){
+    socket.emit('save', [{'name': getProgramName(0),
+                          'time': document.getElementById("time1").value, 
+                          'valves': [
+                            {'name': getValveName(0), 'time': parseInt(document.getElementById("valve11").value)},
+                            {'name': getValveName(1), 'time': parseInt(document.getElementById("valve12").value)},
+                          ],
+                          'enabled': document.getElementById("prog1enabled").checked}, 
+                         {'name': getProgramName(1),
+                          'time': document.getElementById("time2").value,
+                          'valves': [
+                            {'name': getValveName(0), 'time': parseInt(document.getElementById("valve21").value)},
+                            {'name': getValveName(1), 'time': parseInt(document.getElementById("valve22").value)},
+                          ],
+                          'enabled': document.getElementById("prog2enabled").checked}
+                        ], function ack(result){
                             if (result){
                                 saveCurrentValues();
                                 refreshSaveButton();
