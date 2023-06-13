@@ -7,6 +7,7 @@ from flask_socketio import SocketIO
 from importlib_metadata import version, PackageNotFoundError
 
 from piwaterflow import Waterflow
+from log_mgr import Logger, LoggerMode
 from revproxy_auth import RevProxyAuth
 
 
@@ -14,9 +15,13 @@ class PiWWWaterflowService:
     """Class for the web service... its an interface to the real functionality in piwaterflow package.
     """
     def __init__(self,  template_folder, static_folder):
+
+        self.logger = Logger(self.class_name(), log_file_name='piwwwaterflow', mode=LoggerMode.BOTH, dry_run=False)
+        self.logger.info("Launching piwwwaterflow...")
         self.waterflow = Waterflow()
 
         self.app = Flask(__name__,  template_folder=template_folder, static_folder=static_folder)
+
         self.revproxy_auth = RevProxyAuth(self.app, root_class='piwwwaterflow')
 
         self.app.add_url_rule('/', 'index', self.waterflow_endpoint, methods=['GET', 'POST'])
@@ -27,6 +32,11 @@ class PiWWWaterflowService:
         self.socketio.on_event('stop', self.on_stop)
         self.socketio.on_event('save', self.on_save)
 
+    @classmethod
+    def class_name(cls):
+        """ class name """
+        return "piwwwaterflow"
+
     def get_app(self):
         """ Returns WSGI app
         Returns:
@@ -35,6 +45,7 @@ class PiWWWaterflowService:
         return self.app
 
     def run(self):
+        """ Run function """
         # self.app.run()
         self.socketio.run(self.app)
 
@@ -52,7 +63,7 @@ class PiWWWaterflowService:
         Returns:
             dict:Dictionary with all the information about the status of the waterflow system
         """
-        print('Service requested...')
+        self.logger.info('Service requested...')
         try:
             ver = version('piwaterflow')
         except PackageNotFoundError:
