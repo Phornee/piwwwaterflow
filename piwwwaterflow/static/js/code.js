@@ -108,8 +108,8 @@ function update(first_time){
     socket.emit('service_request', function service(response){
         // Version label update
         var versionlabel = document.getElementById('version');
-        frontend = '1.4.0'
-        backend = response.version
+        frontend = response.version_frontend
+        backend = response.version_backend
         versionlabel.textContent = `PiWaterflow ${frontend} (Backend ${backend})`
 
         // Status line update

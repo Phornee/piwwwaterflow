@@ -14,7 +14,7 @@
 			<label id = 'version'> PiWaterflow loading... </label>
 		</div>
 		<form id="waterflow_form" style=" margin-block-end: 0em;" method="POST" action="">
-			<div class="form_description" style="margin-bottom: -;margin-bottom: 0px; margin-top: 0px;">
+			<div class="form_description" style="margin-bottom: 0px; margin-top: 0px;">
 				<label id = 'status'>Status: Retrieving status...</label>
 			</div>
 
@@ -31,10 +31,10 @@
 												<label class="programheader">Start time </label>
 											</th>
 											<th width="30%">
-												<label class="programheader" id="valve1trigger" onclick="forceValve(this,0)">Valve 1</label>
+												<label class="programheader" id="valve1trigger" onclick="forceValve(this, document.getElementById('valve1trigger').textContent)">Valve 1</label>
 											</th>
 											<th width="30%">
-												<label class="programheader" id="valve2trigger" onclick="forceValve(this,1)">Valve 2</label>
+												<label class="programheader" id="valve2trigger" onclick="forceValve(this, document.getElementById('valve2trigger').textContent)">Valve 2</label>
 											</th >
 											<th width="5%">
 												<label class="programheader" >Enabled</label>
@@ -42,7 +42,7 @@
 										</tr>
 										<tr border="0px" id="prog1row">
 											<td>
-												<label class="programheader" id="program1trigger" onclick="forceProgram(this,0)">Prog 1</label>
+												<label class="programheader" id="program1trigger" onclick="forceProgram(this, document.getElementById('program1trigger').textContent)">Prog 1</label>
 											</td>
 											<td>
 												<input type="time" class="timeclass copperround" id="time1" name="time1" required>
@@ -59,7 +59,7 @@
 										</tr>
 										<tr border="0px" id="prog2row">
 											<td>
-												<label class="programheader" id="program2trigger" onclick="forceProgram(this,1)">Prog 2</label>
+												<label class="programheader" id="program2trigger" onclick="forceProgram(this, document.getElementById('program2trigger').textContent)">Prog 2</label>
 											</td>
 											<td>
 												<input type="time" class="timeclass copperround" id="time2" name="time2" required>

@@ -65,20 +65,30 @@ class PiWWWaterflowService:
         """
         self.logger.info('Service requested...')
         try:
-            ver = version('piwaterflow')
+            ver_backend = version('piwaterflow')
+            ver_frontend = version('piwwwwaterflow')
         except PackageNotFoundError:
-            ver = '?.?.?'
+            ver_backend = '?.?.?'
+            ver_frontend = '?.?.?'
 
-        responsedict = {'log': self.waterflow.get_log(),
-                        'forced': self.waterflow.get_forced_info(),
-                        'stop': self.waterflow.stop_requested(),
-                        'config': self._get_public_config(),
-                        'lastlooptime': self.waterflow.last_loop_time().strftime('%Y-%m-%dT%H:%M:%S'),
-                        'version': ver
-                        }
-        # Change to string so that javascript can manage with it
-        for program in responsedict['config']['programs']:
-            program['start_time'] = program['start_time'].strftime('%H:%M')
+        responsedict = None
+
+        try:
+            responsedict = {'log': self.waterflow.get_log(),
+                            'forced': self.waterflow.get_forced_info(),
+                            'stop': self.waterflow.stop_requested(),
+                            'config': self._get_public_config(),
+                            'lastlooptime': self.waterflow.last_loop_time().strftime('%Y-%m-%dT%H:%M:%S'),
+                            'version_backend': ver_backend,
+                            'version_frontend': ver_frontend
+                            }
+            # Change to string so that javascript can manage with it
+            for program in responsedict['config']['programs']:
+                program['start_time'] = program['start_time'].strftime('%H:%M')
+        except Exception as ex:
+            self.logger.error('Error calculating service request: %s', ex)
+            raise RuntimeError(f'Exception on service request: {ex}') from ex
+
         return responsedict
 
     def on_force(self, data: dict):
@@ -90,7 +100,7 @@ class PiWWWaterflowService:
         print(f'Force requested... {data}')
         type_force = data['type']
         value_force = data['value']
-        self.waterflow.force(type_force, int(value_force))
+        self.waterflow.force(type_force, value_force)
 
     def on_stop(self):
         """ Event to stop current operation """
