@@ -4,7 +4,7 @@ import os
 
 from piwwwaterflow import PiWWWaterflowService
 
-def create_service():
+def _create_service():
     """ Instantiation of the webservice
     Returns:
        Webservice class instantiated
@@ -18,10 +18,10 @@ def create_app():
     Returns:
         WSGI app provided by the PiWWWaterflowService/Flask
     """
-    wtf_service = create_service()
+    wtf_service = _create_service()
     return wtf_service.get_app()
 
 # __main__ used for standalone execution (debugging). For WSGI call, the "wsgi:create_app()" function should be called
 if __name__ == '__main__':
-    service = create_service()
-    service.socketio.run(service.app, host='0.0.0.0', port=5000, debug=True, use_reloader=False)
+    service = create_app()
+    service.run()

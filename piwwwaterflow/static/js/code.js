@@ -1,7 +1,5 @@
 var forceTriggersEnabled = true
 
-var socket = io();
-
 function _setEnableForceTriggers(enable){
     forceTriggersEnabled = enable
 }
@@ -93,23 +91,19 @@ function _readableDay(original, start, end, formattedNow, formattedTomorrow){
     }
 }
 
-socket.on('connect', function() {
-    update(true);
-});
-
-socket.on('disconnect', function() {
-    //document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; ";
-    location.reload();
-});
+update(true);
 
 setInterval("update(false);",30000);
 
 function update(first_time){
-    socket.emit('service_request', function service(response){
-        // Version label update
+    let requestservice = new XMLHttpRequest();
+    // Add timestamp to avoid caching
+    requestservice.open('GET', '/service?' + (new Date()).getTime());
+    requestservice.responseType = 'json';
+    requestservice.onload = function() {
         var versionlabel = document.getElementById('version');
-        frontend = response.version_frontend
-        backend = response.version_backend
+        frontend = requestservice.response.version_frontend
+        backend = requestservice.response.version_backend
         versionlabel.textContent = `PiWaterflow ${frontend} (Backend ${backend})`
 
         // Status line update
@@ -119,7 +113,7 @@ function update(first_time){
         tomorrow.setDate(now.getDate() + 1)
         formattedTomorrow = _datestringFromDate(tomorrow).slice(0,10)
 
-        lastlooptime = new Date(response.lastlooptime)
+        lastlooptime = new Date(requestservice.response.lastlooptime)
 
         formattedLastLoopDate =  _datestringFromDate(lastlooptime)
 
@@ -144,7 +138,7 @@ function update(first_time){
         atbottom = ((logtextarea.scrollHeight - logtextarea.scrollTop) <= logtextarea.clientHeight);
 
         var newlines = "";
-        var lines = response.log.split('\n');
+        var lines = requestservice.response.log.split('\n');
 
         for(var i = 0;i < lines.length;i++){
             if (lines[i].slice(20,24) == 'Next'){
@@ -162,14 +156,14 @@ function update(first_time){
             logtextarea.scrollTop = logtextarea.scrollHeight;
 
         // Stop button update
-        if (response.stop==false)
+        if (requestservice.response.stop==false)
             document.getElementById('stop').disabled = false
         else
             document.getElementById('stop').disabled = true
 
         // Force triggers update
         _resetForceTriggers();
-        var forcedObj = response.forced;
+        var forcedObj = requestservice.response.forced;
         if (forcedObj!=null){
             _setEnableForceTriggers(false);
 
@@ -191,7 +185,7 @@ function update(first_time){
         }
 
         // Controls update
-        var configObj = response.config;
+        var configObj = requestservice.response.config;
         if (configObj!=null){
             time1 = document.getElementById("time1");
             if (!time1.changed)
@@ -230,12 +224,26 @@ function update(first_time){
                 refreshSaveButton();
             }
         }
-    });
+    };
+    requestservice.send();
 }
 
 function forceProgram(control, program_forced){
     if (forceTriggersEnabled && confirm("Are you sure you want to force program?.")) {
-        socket.emit('force', {'type': 'program', 'value': program_forced});
+        let requestservice = new XMLHttpRequest();
+        requestservice.open('POST', '/force');
+        requestservice.responseType = 'text';
+        requestservice.onload = function() {
+            if (requestservice.response=='false'){
+
+            }
+        }
+        var data = new FormData();
+        data.append('type', 'program');
+        data.append('value', program_forced);
+
+        requestservice.send(data);
+
         control.style.color = '#22FF22'
         _setEnableForceTriggers(false)
     }
@@ -246,7 +254,19 @@ function forceProgram(control, program_forced){
 
 function forceValve(control, valve_forced){
     if (forceTriggersEnabled && confirm("Are you sure you want to force valve?.")) {
-        socket.emit('force', {'type': 'valve', 'value': valve_forced});
+        let requestservice = new XMLHttpRequest();
+        requestservice.open('POST', '/force');
+        requestservice.responseType = 'text';
+        requestservice.onload = function() {
+            if (requestservice.response=='false'){
+
+            }
+        }
+        var data = new FormData();
+        data.append('type', 'valve');
+        data.append('value', valve_forced);
+
+        requestservice.send(data);
         control.style.color = '#22FF22'
         _setEnableForceTriggers(false)
     }
@@ -256,12 +276,23 @@ function forceValve(control, valve_forced){
 }
 
 function stopWaterflow(button){
-    socket.emit('stop');
+    let requestservice = new XMLHttpRequest();
+    requestservice.open('POST', '/stop');
+    requestservice.send();
     button.disabled = true;
 }
 
 function save(button){
-    socket.emit('save', [{'name': getProgramName(0),
+    let requestservice = new XMLHttpRequest();
+    requestservice.open('POST', '/force');
+    requestservice.responseType = 'text';
+    requestservice.onload = function() {
+        if (requestservice.response=='false'){
+
+        }
+    }
+    var data = new FormData();
+    data.append('save', [{'name': getProgramName(0),
                           'time': document.getElementById("time1").value, 
                           'valves': [
                             {'name': getValveName(0), 'time': parseInt(document.getElementById("valve11").value)},
@@ -282,5 +313,6 @@ function save(button){
                                 button.disabled = true;
                             }
                         });
+    requestservice.send();
 }
 
