@@ -3,7 +3,6 @@ from datetime import datetime
 
 from flask import Flask, render_template, request
 from flask_compress import Compress
-from flask_socketio import SocketIO
 from importlib_metadata import version, PackageNotFoundError
 
 from piwaterflow import Waterflow
@@ -24,13 +23,15 @@ class PiWWWaterflowService:
 
         self.revproxy_auth = RevProxyAuth(self.app, root_class='piwwwaterflow')
 
-        self.app.add_url_rule('/', 'index', self.waterflow_endpoint, methods=['GET', 'POST'])
+        self.app.add_url_rule('/', 'waterflow', self.waterflow_endpoint, methods=['GET', 'POST'])
+
+        self.app.add_url_rule('/service', 'service', self.on_service_request, methods=['GET'])
+        self.app.add_url_rule('/force', 'force', self.on_force, methods=['GET', 'POST'])
+        self.app.add_url_rule('/stop', 'stop', self.on_stop, methods=['GET', 'POST'])
+        self.app.add_url_rule('/save', 'save', self.on_save, methods=['POST'])
+
         Compress(self.app)
-        self.socketio = SocketIO(self.app, cors_allowed_origins='*')
-        self.socketio.on_event('service_request', self.on_service_request)
-        self.socketio.on_event('force', self.on_force)
-        self.socketio.on_event('stop', self.on_stop)
-        self.socketio.on_event('save', self.on_save)
+        self.waterflow = Waterflow()
 
     @classmethod
     def class_name(cls):
@@ -46,8 +47,7 @@ class PiWWWaterflowService:
 
     def run(self):
         """ Run function """
-        # self.app.run()
-        self.socketio.run(self.app)
+        self.app.run()
 
     def waterflow_endpoint(self):
         """ Main endpoint that returns the main page for piwaterflow
@@ -97,23 +97,33 @@ class PiWWWaterflowService:
             data (dict): 'type': Must be 'valve' or 'program'
                          'value': Must be the index of the program or value to be forced
         """
-        print(f'Force requested... {data}')
-        type_force = data['type']
-        value_force = data['value']
-        self.waterflow.force(type_force, value_force)
+        if request.method == 'POST':
+            print(f'Force requested... {data}')
+            type_force = request.form.get['type']
+            value_force = request.form.get['value']
+            self.waterflow.force(type_force, value_force)
+        else:
+            forced_data = self.waterflow.get_forced_info()
+            return forced_data
+            # return json.dumps(forced_data)
 
     def on_stop(self):
         """ Event to stop current operation """
-        print('Stop requested...')
-        self.waterflow.stop()
+        if request.method == 'POST':
+            print('Stop requested...')
+            self.waterflow.stop()
+        else:
+            stop_requested = self.waterflow.stop_requested()
+            return "true" if stop_requested else "false"
 
-    def on_save(self, data):
+    def on_save(self):
         """ Event to save the changes in the watering system schedulling
         Args:
             data (dict): Information about the required schedulling
         Returns:
             bool: If everything went ok
         """
+        data = request.form.get['save']
         parsed_config = self.waterflow.config.get_dict_copy()
         for program, update in zip(parsed_config['programs'], data):
             self._change_program(program, update)
