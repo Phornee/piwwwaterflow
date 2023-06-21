@@ -17,7 +17,6 @@ class PiWWWaterflowService:
 
         self.logger = Logger(self.class_name(), log_file_name='piwwwaterflow', mode=LoggerMode.BOTH, dry_run=False)
         self.logger.info("Launching piwwwaterflow...")
-        self.waterflow = Waterflow()
 
         self.app = Flask(__name__,  template_folder=template_folder, static_folder=static_folder)
 
@@ -31,7 +30,6 @@ class PiWWWaterflowService:
         self.app.add_url_rule('/save', 'save', self.on_save, methods=['POST'])
 
         Compress(self.app)
-        self.waterflow = Waterflow()
 
     @classmethod
     def class_name(cls):
@@ -64,6 +62,9 @@ class PiWWWaterflowService:
             dict:Dictionary with all the information about the status of the waterflow system
         """
         self.logger.info('Service requested...')
+
+        waterflow = Waterflow()
+
         try:
             ver_backend = version('piwaterflow')
             ver_frontend = version('piwwwwaterflow')
@@ -74,11 +75,11 @@ class PiWWWaterflowService:
         responsedict = None
 
         try:
-            responsedict = {'log': self.waterflow.get_log(),
-                            'forced': self.waterflow.get_forced_info(),
-                            'stop': self.waterflow.stop_requested(),
-                            'config': self._get_public_config(),
-                            'lastlooptime': self.waterflow.last_loop_time().strftime('%Y-%m-%dT%H:%M:%S'),
+            responsedict = {'log': waterflow.get_log(),
+                            'forced': waterflow.get_forced_info(),
+                            'stop': waterflow.stop_requested(),
+                            'config': self._filter_public_config(waterflow.config.get_dict_copy()),
+                            'lastlooptime': waterflow.last_loop_time().strftime('%Y-%m-%dT%H:%M:%S'),
                             'version_backend': ver_backend,
                             'version_frontend': ver_frontend
                             }
@@ -97,23 +98,27 @@ class PiWWWaterflowService:
             data (dict): 'type': Must be 'valve' or 'program'
                          'value': Must be the index of the program or value to be forced
         """
+        waterflow = Waterflow()
+
         if request.method == 'POST':
-            print(f'Force requested... {data}')
+            self.logger.info('Force requested...%s', data)
             type_force = request.form.get['type']
             value_force = request.form.get['value']
-            self.waterflow.force(type_force, value_force)
+            waterflow.force(type_force, value_force)
         else:
-            forced_data = self.waterflow.get_forced_info()
+            forced_data = waterflow.get_forced_info()
             return forced_data
             # return json.dumps(forced_data)
 
     def on_stop(self):
         """ Event to stop current operation """
+        waterflow = Waterflow()
+
         if request.method == 'POST':
-            print('Stop requested...')
-            self.waterflow.stop()
+            self.logger.info('Stop requested...')
+            waterflow.stop()
         else:
-            stop_requested = self.waterflow.stop_requested()
+            stop_requested = waterflow.stop_requested()
             return "true" if stop_requested else "false"
 
     def on_save(self):
@@ -123,16 +128,18 @@ class PiWWWaterflowService:
         Returns:
             bool: If everything went ok
         """
+        waterflow = Waterflow()
+
+        self.logger.info("Saving programs...")
         data = request.form.get['save']
-        parsed_config = self.waterflow.config.get_dict_copy()
+        parsed_config = waterflow.config.get_dict_copy()
         for program, update in zip(parsed_config['programs'], data):
             self._change_program(program, update)
 
-        self.waterflow.update_config(programs=parsed_config['programs'])
+        waterflow.update_config(programs=parsed_config['programs'])
         return True
 
-    def _get_public_config(self):
-        config = self.waterflow.config.get_dict_copy()
+    def _filter_public_config(self, config):
         del config['influxdbconn']
         return config
 
