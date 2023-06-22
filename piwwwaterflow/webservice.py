@@ -1,7 +1,7 @@
 """ Webservice to control and manage the piwaterflow loop """
 from datetime import datetime
-
-from flask import Flask, render_template, request
+import json
+from flask import Flask, render_template, request, make_response, Response
 from flask_compress import Compress
 from importlib_metadata import version, PackageNotFoundError
 
@@ -90,9 +90,9 @@ class PiWWWaterflowService:
             self.logger.error('Error calculating service request: %s', ex)
             raise RuntimeError(f'Exception on service request: {ex}') from ex
 
-        return responsedict
+        return make_response(json.dumps(responsedict), 200)
 
-    def on_force(self, data: dict):
+    def on_force(self):
         """ On force action request
         Args:
             data (dict): 'type': Must be 'valve' or 'program'
@@ -101,14 +101,15 @@ class PiWWWaterflowService:
         waterflow = Waterflow()
 
         if request.method == 'POST':
-            self.logger.info('Force requested...%s', data)
-            type_force = request.form.get['type']
-            value_force = request.form.get['value']
+            type_force = request.form.get('type')
+            value_force = request.form.get('value')
+            self.logger.info('Force requested: %s = %s', type_force, value_force)
+
             waterflow.force(type_force, value_force)
+            return make_response('Force scheduled: %s = %s', type_force, value_force, 200)
         else:
             forced_data = waterflow.get_forced_info()
-            return forced_data
-            # return json.dumps(forced_data)
+            return make_response(json.dumps(forced_data), 200)
 
     def on_stop(self):
         """ Event to stop current operation """
@@ -117,9 +118,10 @@ class PiWWWaterflowService:
         if request.method == 'POST':
             self.logger.info('Stop requested...')
             waterflow.stop()
+            return "true"
         else:
             stop_requested = waterflow.stop_requested()
-            return "true" if stop_requested else "false"
+            return make_response(json.dumps(stop_requested), 200)
 
     def on_save(self):
         """ Event to save the changes in the watering system schedulling
@@ -131,13 +133,13 @@ class PiWWWaterflowService:
         waterflow = Waterflow()
 
         self.logger.info("Saving programs...")
-        data = request.form.get['save']
+        data = json.loads(request.form.get('save'))
         parsed_config = waterflow.config.get_dict_copy()
         for program, update in zip(parsed_config['programs'], data):
             self._change_program(program, update)
 
         waterflow.update_config(programs=parsed_config['programs'])
-        return True
+        return "true"
 
     def _filter_public_config(self, config):
         del config['influxdbconn']

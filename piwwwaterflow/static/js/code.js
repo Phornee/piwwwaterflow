@@ -234,8 +234,9 @@ function forceProgram(control, program_forced){
         requestservice.open('POST', '/force');
         requestservice.responseType = 'text';
         requestservice.onload = function() {
-            if (requestservice.response=='false'){
-
+            if (requestservice.response=='true'){
+                control.style.color = '#22FF22'
+                _setEnableForceTriggers(false)
             }
         }
         var data = new FormData();
@@ -243,9 +244,6 @@ function forceProgram(control, program_forced){
         data.append('value', program_forced);
 
         requestservice.send(data);
-
-        control.style.color = '#22FF22'
-        _setEnableForceTriggers(false)
     }
     else {
         control.checked = false
@@ -258,8 +256,9 @@ function forceValve(control, valve_forced){
         requestservice.open('POST', '/force');
         requestservice.responseType = 'text';
         requestservice.onload = function() {
-            if (requestservice.response=='false'){
-
+            if (requestservice.response=='true'){
+                control.style.color = '#22FF22'
+                _setEnableForceTriggers(false)
             }
         }
         var data = new FormData();
@@ -267,8 +266,6 @@ function forceValve(control, valve_forced){
         data.append('value', valve_forced);
 
         requestservice.send(data);
-        control.style.color = '#22FF22'
-        _setEnableForceTriggers(false)
     }
     else {
         control.checked = false
@@ -284,15 +281,18 @@ function stopWaterflow(button){
 
 function save(button){
     let requestservice = new XMLHttpRequest();
-    requestservice.open('POST', '/force');
+    requestservice.open('POST', '/save');
     requestservice.responseType = 'text';
     requestservice.onload = function() {
-        if (requestservice.response=='false'){
-
+        if (requestservice.response=='true'){
+            saveCurrentValues();
+            refreshSaveButton();
+            button.disabled = true;
         }
     }
     var data = new FormData();
-    data.append('save', [{'name': getProgramName(0),
+    data.append('save', JSON.stringify(
+                        [{'name': getProgramName(0),
                           'time': document.getElementById("time1").value, 
                           'valves': [
                             {'name': getValveName(0), 'time': parseInt(document.getElementById("valve11").value)},
@@ -306,13 +306,7 @@ function save(button){
                             {'name': getValveName(1), 'time': parseInt(document.getElementById("valve22").value)},
                           ],
                           'enabled': document.getElementById("prog2enabled").checked}
-                        ], function ack(result){
-                            if (result){
-                                saveCurrentValues();
-                                refreshSaveButton();
-                                button.disabled = true;
-                            }
-                        });
-    requestservice.send();
+                        ]));
+    requestservice.send(data);
 }
 
