@@ -44,11 +44,32 @@ textarea#log {
     text-shadow: 1px 1px 2px black, 0 0 25px black, 0 0 5px black;
 }
 
-div div span{
+@keyframes pulse {
+	0% {
+		transform: scale(0.90);
+	}
+
+	50% {
+		transform: scale(1);
+	}
+
+	100% {
+		transform: scale(0.90);
+	}
+}
+
+.logo
+{
+    display: inline-block;
+    animation: pulse 1s infinite ease-in-out;
+}
+
+
+/* div div span{
     font-size:180%;
     color: #222222;
     vertical-align: middle;
-}
+} */
 
 div img {
     display: inline-block;

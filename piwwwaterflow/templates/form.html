@@ -8,10 +8,15 @@
 </head>
 <body id="main_body" style="background-color: #444444; color: #DFDFDF;" >
 	<div id="form_container" align="center">
-		<div class="mainheader">
-			<!--<img src="static/img/icon-256.png" alt="Icon" width="90em" height="90em">-->
-			<img src="static/img/piwaterflow.svg" alt="Icon" width="90em" height="90em">
-			<label id = 'version'> PiWaterflow loading... </label>
+		<div >
+            <span >
+                <div class="logo" >
+			        <img src="static/img/piwaterflow.svg" alt="Icon" width="'90em" height="90em">
+                </div>
+            </span>
+            <span class="mainheader">
+			    <label id = 'version'> PiWaterflow loading... </label>
+            </span>
 		</div>
 		<form id="waterflow_form" style=" margin-block-end: 0em;" method="POST" action="">
 			<div class="form_description" style="margin-bottom: 0px; margin-top: 0px;">
@@ -100,7 +105,6 @@
 	<div>
 		<iframe id="grafana_iframe" src="https://grafana.phornee.synology.me/d-solo/m_AskAmgk/jardin?orgId=2&showCategory=Override+2&from=now-24h&to=now&theme=dark&panelId=2" width="100%" height="50%" frameborder="0"></iframe>
 	</div>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js" integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA==" crossorigin="anonymous"></script>
 	<script type="text/javascript" src="static/js/code.js"></script>
 	</body>
 </html>

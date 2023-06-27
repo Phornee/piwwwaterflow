@@ -101,6 +101,10 @@ function update(first_time){
     requestservice.open('GET', '/service?' + (new Date()).getTime());
     requestservice.responseType = 'json';
     requestservice.onload = function() {
+        if (requestservice.status == 401)
+        {
+            document.location.reload()
+        }
         var versionlabel = document.getElementById('version');
         frontend = requestservice.response.version_frontend
         backend = requestservice.response.version_backend

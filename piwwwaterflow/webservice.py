@@ -1,9 +1,11 @@
 """ Webservice to control and manage the piwaterflow loop """
 from datetime import datetime
+import os
+import re
 import json
-from flask import Flask, render_template, request, make_response, Response
+from pathlib import Path
+from flask import Flask, render_template, request, make_response
 from flask_compress import Compress
-from importlib_metadata import version, PackageNotFoundError
 
 from piwaterflow import Waterflow
 from log_mgr import Logger, LoggerMode
@@ -63,12 +65,18 @@ class PiWWWaterflowService:
         """
         self.logger.info('Service requested...')
 
+        if not self.revproxy_auth.session_token_valid(request):
+            self.logger.info('Credentials not valid. Expired?.')
+            return make_response("Credentials not valid. Expired?.", 401)
+
         waterflow = Waterflow()
 
         try:
-            ver_backend = version('piwaterflow')
-            ver_frontend = version('piwwwwaterflow')
-        except PackageNotFoundError:
+            ver_backend = waterflow.get_version()
+            ver_frontend = self.get_version()
+        except Exception as ex:
+            self.logger.info('Versions could not be found: %s', ex)
+
             ver_backend = '?.?.?'
             ver_frontend = '?.?.?'
 
@@ -153,3 +161,16 @@ class PiWWWaterflowService:
         program['valves'][0] = new_program['valves'][0]
         program['valves'][1] = new_program['valves'][1]
         program['enabled'] = new_program['enabled']
+
+    @classmethod
+    def get_version(cls) -> str:
+        """ Gets version string from the init file
+        Returns:
+            str: Version string
+        """
+        version_file = os.path.join(Path(__file__).parent.resolve(), '__init__.py')
+        with open(version_file, 'r',  encoding="utf-8") as initfile_lines:
+            content = initfile_lines.read()
+            version = re.search(r'__version__ = ["|\'](.*?)["|\']', content).group(1)
+            return version
+        raise RuntimeError(f'Unable to find version string in {version_file}.')
