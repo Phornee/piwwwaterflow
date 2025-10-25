@@ -35,7 +35,7 @@ setuptools.setup(
         "Topic :: Home Automation",
     ],
     install_requires=[
-        'Flas==3.1.0', #3.1.0
+        'Flask==3.1.0', #3.1.0
         'flask-compress',
         'importlib-metadata',
         'piwaterflow>=1.0.0',
