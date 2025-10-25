@@ -9,3 +9,5 @@ Flask/Gunicorn Webservice for piwaterflow system
   + New waterflow config & LAN influxdb
 + 1.2.3
   + Black header & config fix
++ 1.2.4
+  + Remove synology OTP calculation

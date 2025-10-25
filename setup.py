@@ -35,11 +35,11 @@ setuptools.setup(
         "Topic :: Home Automation",
     ],
     install_requires=[
-        'Flask>=1.1.2',
+        'Flask>=3.0.3', #3.1.0
         'flask-compress>=1.9.0',
         'importlib-metadata>=4.5.0',
         'piwaterflow>=1.0.0',
-        'revproxy_auth>=0.1.8'
+        'revproxy_auth>=0.1.16',
     ],
     python_requires='>=3.6',
 )
