@@ -20,7 +20,7 @@ jobs:
       - name: Set up python 3.9
         uses: actions/setup-python@v3
         with:
-          python-version: "3.9"
+          python-version: "3.8"
       
       # Installs and upgrades pip, installs other dependencies and installs the package from setup.py
       - name: "Installs and upgrades pip, installs other dependencies and installs the package from setup.py"
