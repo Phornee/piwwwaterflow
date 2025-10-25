@@ -36,7 +36,7 @@ setuptools.setup(
     ],
     install_requires=[
         'Flask==3.1.0', #3.1.0
-        'flask-compress',
+        # 'flask-compress',
         'importlib-metadata',
         'piwaterflow>=1.0.0',
         'revproxy_auth>=0.1.16',

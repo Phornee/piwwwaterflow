@@ -5,7 +5,7 @@ import re
 import json
 from pathlib import Path
 from flask import Flask, render_template, request, make_response
-from flask_compress import Compress
+# from flask_compress import Compress
 
 from piwaterflow import Waterflow
 from log_mgr import Logger, LoggerMode
@@ -31,7 +31,7 @@ class PiWWWaterflowService:
         self.app.add_url_rule('/stop', 'stop', self.on_stop, methods=['GET', 'POST'])
         self.app.add_url_rule('/save', 'save', self.on_save, methods=['POST'])
 
-        Compress(self.app)
+        # Compress(self.app)
 
     @classmethod
     def class_name(cls):
